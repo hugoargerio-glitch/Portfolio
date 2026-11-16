@@ -2,10 +2,10 @@
 
 Portfólio profissional dual-mode construído com **Astro 5**, **Tailwind CSS v4** e **TypeScript**, projetado para alternar dinamicamente sem flash visual (`data-mode` + `?modo=`) entre dois públicos:
 
-- **`?modo=clt` — Modo Recrutador (CLT / Tech):** foco em arquitetura de dados, stack técnica, contratos de dados executáveis (`ODCS v3.2.0`), testes automatizados, experiência técnica, certificações IBM e currículo em PDF (`/portfolio/Hugo_Campos_Resume_DE.pdf`).
+- **`?modo=clt` — Modo Recrutador (CLT / Tech):** foco em arquitetura de dados, stack técnica, contratos de dados executáveis (`ODCS v3.2.0`), testes automatizados, experiência técnica, certificações IBM e currículo em PDF (`/Portfolio/Hugo_Campos_Resume_DE.pdf`).
 - **`?modo=freela` — Modo Empresa (Freelancer B2B):** foco em ROI, redução de risco operacional, automação de ERPs e planilhas, 4 pacotes de escopo fechado com SLA em dias úteis e CTA direto via WhatsApp/e-mail.
 
-URL de publicação prevista no GitHub Pages: `https://hugoargerio-glitch.github.io/portfolio/`
+URL de publicação no GitHub Pages: `https://hugoargerio-glitch.github.io/Portfolio/`
 
 ## Projetos em Destaque
 
@@ -34,7 +34,7 @@ URL de publicação prevista no GitHub Pages: `https://hugoargerio-glitch.github
 │   ├── config.ts                      # Fonte única tipada: cltConfig, freelaConfig, navItems
 │   ├── pages/index.astro              # Layout principal com inicialização síncrona anti-FOUC
 │   └── styles/global.css              # Tailwind v4 + variáveis de tema e visibilidade [data-mode]
-├── astro.config.mjs                   # Configuração Astro (site & base: "/portfolio")
+├── astro.config.mjs                   # Configuração Astro (site & base: "/Portfolio")
 └── package.json
 ```
 
@@ -42,7 +42,7 @@ URL de publicação prevista no GitHub Pages: `https://hugoargerio-glitch.github
 
 ```bash
 npm install
-npm run dev       # Servidor local em http://localhost:4321/portfolio/
+npm run dev       # Servidor local em http://localhost:4321/Portfolio/
 npm run check     # astro sync + tsc --noEmit
 npm run build     # Gera o build estático em dist/
 npm run preview   # Pré-visualização local do build
