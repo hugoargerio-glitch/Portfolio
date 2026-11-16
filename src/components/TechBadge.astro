@@ -1,0 +1,42 @@
+---
+import { getTechIcons } from "../utils/techIcons";
+
+interface Props {
+  label: string;
+  variant?: "light" | "dark";
+}
+
+const { label, variant = "light" } = Astro.props;
+const icons = getTechIcons(label);
+
+const classes =
+  variant === "dark"
+    ? "inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-gray-900 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 group-hover:bg-gray-800 dark:bg-slate-800/90 dark:text-slate-200 dark:border dark:border-slate-700/80 dark:group-hover:border-slate-600"
+    : "inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-800 rounded-full text-sm sm:text-base md:text-lg font-medium hover:bg-gray-200 dark:bg-slate-800/80 dark:text-slate-200 dark:border dark:border-slate-700/80 dark:hover:border-[var(--accent-color)]/50 dark:hover:bg-slate-800 transition-colors duration-200";
+---
+
+<span class={classes}>
+  {
+    icons.map((icon) => (
+      <img
+        src={icon.src}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        class={`w-4 h-4 shrink-0 object-contain ${
+          icon.invertOnDark
+            ? variant === "dark"
+              ? "invert brightness-95"
+              : "dark:invert dark:brightness-90"
+            : ""
+        } ${
+          icon.badgeOnLight && variant === "light"
+            ? "rounded-full bg-gray-900 p-0.5 dark:bg-transparent dark:p-0"
+            : ""
+        }`.trim()}
+      />
+    ))
+  }
+  <span>{label}</span>
+</span>
