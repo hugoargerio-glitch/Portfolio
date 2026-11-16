@@ -1,5 +1,7 @@
 ---
 import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
+import { cltConfigEn, freelaConfigEn } from "../i18n/configs";
+import BiText from "./BiText.astro";
 ---
 
 <footer class="relative bg-gray-50/75 dark:bg-[#0B0F17]/75 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
@@ -13,10 +15,10 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
             {siteConfig.name}
           </h3>
           <p class="mode-clt text-base text-gray-600 dark:text-slate-300 mt-1">
-            {cltConfig.title}
+            <BiText pt={cltConfig.title} en={cltConfigEn.title} />
           </p>
           <p class="mode-freela text-base text-gray-600 dark:text-slate-300 mt-1">
-            {freelaConfig.title}
+            <BiText pt={freelaConfig.title} en={freelaConfigEn.title} />
           </p>
         </div>
 
@@ -46,44 +48,82 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
               <path d="M7 11l5 5l5 -5"></path>
               <path d="M12 4l0 12"></path>
             </svg>
-            {cltConfig.cta.label}
+            <BiText pt={cltConfig.cta.label} en={cltConfigEn.cta.label} />
           </a>
 
-          <a
-            href={freelaConfig.cta.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mode-freela inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
-            style="background-color: var(--freela-accent)"
-          >
-            {freelaConfig.cta.label}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
+          <span class="mode-freela inline-flex">
+            <a
+              href={freelaConfig.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lang-pt inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+              style="background-color: var(--freela-accent)"
             >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M7 17l10 -10"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </a>
+              {freelaConfig.cta.label}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M7 17l10 -10"></path>
+                <path d="M7 7h10v10"></path>
+              </svg>
+            </a>
+            <a
+              href={freelaConfigEn.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lang-en inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+              style="background-color: var(--freela-accent)"
+            >
+              {freelaConfigEn.cta.label}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M7 17l10 -10"></path>
+                <path d="M7 7h10v10"></path>
+              </svg>
+            </a>
+          </span>
 
           {
             freelaConfig.cta.secondaryHref &&
               freelaConfig.cta.secondaryLabel && (
-                <a
-                  href={freelaConfig.cta.secondaryHref}
-                  class="mode-freela inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#111827]/90 text-sm font-medium text-gray-700 dark:text-slate-200 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100 transition-colors"
-                >
-                  {freelaConfig.cta.secondaryLabel}
-                </a>
+                <span class="mode-freela inline-flex">
+                  <a
+                    href={freelaConfig.cta.secondaryHref}
+                    class="lang-pt inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#111827]/90 text-sm font-medium text-gray-700 dark:text-slate-200 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100 transition-colors"
+                  >
+                    {freelaConfig.cta.secondaryLabel}
+                  </a>
+                  {freelaConfigEn.cta.secondaryHref &&
+                    freelaConfigEn.cta.secondaryLabel && (
+                      <a
+                        href={freelaConfigEn.cta.secondaryHref}
+                        class="lang-en inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#111827]/90 text-sm font-medium text-gray-700 dark:text-slate-200 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100 transition-colors"
+                      >
+                        {freelaConfigEn.cta.secondaryLabel}
+                      </a>
+                    )}
+                </span>
               )
           }
         </div>
@@ -243,7 +283,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
                 href={item.href}
                 class={`${item.modeClass ?? ""} whitespace-nowrap text-sm text-gray-600 hover:text-gray-800 dark:text-slate-400 dark:hover:text-slate-100 transition-colors`.trim()}
               >
-                {item.label}
+                <BiText pt={item.label} en={item.labelEn} />
               </a>
             ))
           }
@@ -257,14 +297,20 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
               rel="noopener noreferrer"
               class="mode-freela text-xs text-gray-500 dark:text-slate-400 underline underline-offset-4 hover:text-gray-800 dark:hover:text-slate-200 transition-colors"
             >
-              Currículo técnico (PDF)
+              <BiText
+                pt="Currículo técnico (PDF)"
+                en="Technical Resume (PDF)"
+              />
             </a>
           )
         }
 
         <p class="text-sm text-gray-500 dark:text-slate-400">
-          © {new Date().getFullYear()} {siteConfig.name}. Todos os direitos
-          reservados.
+          © {new Date().getFullYear()} {siteConfig.name}.{" "}
+          <BiText
+            pt="Todos os direitos reservados."
+            en="All rights reserved."
+          />
         </p>
       </div>
     </div>

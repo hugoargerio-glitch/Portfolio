@@ -1,5 +1,7 @@
 ---
 import { profileEntries, withBase } from "../config";
+import { profileBilingualEntries } from "../i18n/configs";
+import BiText from "./BiText.astro";
 import TechBadge from "./TechBadge.astro";
 
 const hasCertifications = profileEntries.some(
@@ -7,9 +9,9 @@ const hasCertifications = profileEntries.some(
 );
 
 const SUMMARY_METRICS = [
-  "~400h de carga prática",
-  "29 cursos concluídos",
-  "2 Capstones aplicados",
+  { pt: "~400h de carga prática", en: "~400h hands-on training" },
+  { pt: "29 cursos concluídos", en: "29 courses completed" },
+  { pt: "2 Capstones aplicados", en: "2 applied capstones" },
 ] as const;
 ---
 
@@ -22,7 +24,7 @@ const SUMMARY_METRICS = [
           <div class="lg:col-span-4 space-y-5">
             <div>
               <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-slate-100">
-                Certificações
+                <BiText pt="Certificações" en="Certifications" />
               </h2>
               <div
                 class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
@@ -31,13 +33,16 @@ const SUMMARY_METRICS = [
             </div>
 
             <p class="mode-clt text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-              Especializações profissionais IBM / Coursera cobrindo engenharia
-              de pipelines distribuídos, governança corporativa e arquitetura de
-              dados ponta a ponta.
+              <BiText
+                pt="Especializações profissionais IBM / Coursera cobrindo engenharia de pipelines distribuídos, governança corporativa e arquitetura de dados ponta a ponta."
+                en="IBM / Coursera professional specializations covering distributed data pipelines, enterprise governance, and end-to-end data architecture."
+              />
             </p>
             <p class="mode-freela text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-              Formação certificada pela IBM aplicada na entrega de automações
-              seguras, bancos rápidos e compliance de dados para empresas.
+              <BiText
+                pt="Formação certificada pela IBM aplicada na entrega de automações seguras, bancos rápidos e compliance de dados para empresas."
+                en="IBM-certified training applied to delivering reliable automations, high-speed databases, and data compliance for B2B clients."
+              />
             </p>
 
             {/* Mini-card consolidado Formação Verificada IBM */}
@@ -47,7 +52,7 @@ const SUMMARY_METRICS = [
                   class="text-xs font-mono font-bold uppercase tracking-wider"
                   style="color: var(--accent-color)"
                 >
-                  Formação Verificada IBM
+                  <BiText pt="Formação Verificada IBM" en="IBM Verified Training" />
                 </span>
                 <span class="text-[10px] font-mono text-gray-400 dark:text-slate-500">
                   Credly × Coursera
@@ -61,23 +66,26 @@ const SUMMARY_METRICS = [
                       class="h-1.5 w-1.5 rounded-full shrink-0"
                       style="background-color: var(--accent-color)"
                     />
-                    <span>{item}</span>
+                    <span><BiText pt={item.pt} en={item.en} /></span>
                   </li>
                 ))}
               </ul>
 
               <p class="pt-1 text-[11px] font-mono text-gray-500 dark:text-slate-400 leading-relaxed">
-                Data Engineering + Data Architecture • Diplomas auditáveis em
-                tela cheia
+                <BiText
+                  pt="Data Engineering + Data Architecture • Diplomas auditáveis em tela cheia"
+                  en="Data Engineering + Data Architecture • Full-screen verifiable certificates"
+                />
               </p>
             </div>
           </div>
 
           {/* Coluna Direita: Cards Expansíveis com Preview + Verificação */}
           <div class="lg:col-span-8">
-            {profileEntries.map(({ mode, modeClass, config }) => (
+            {profileBilingualEntries.map(({ mode, modeClass, pt, en }) => (
               <div class={`${modeClass} space-y-6`}>
-                {config.certifications.map((cert, index) => {
+                {pt.certifications.map((cert, index) => {
+                  const certEn = en.certifications[index] ?? cert;
                   const panelId = `cert-panel-${mode}-${index}`;
                   const cardId = `cert-card-${mode}-${index}`;
                   return (
@@ -105,12 +113,12 @@ const SUMMARY_METRICS = [
                                 {cert.issuer}
                               </p>
                               <span class="inline-flex items-center px-2 py-0.5 rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-[#0B0F17]/90 text-[11px] font-mono text-gray-600 dark:text-slate-300">
-                                {cert.completedDate}
+                                <BiText pt={cert.completedDate} en={certEn.completedDate} />
                               </span>
                             </div>
 
                             <h3 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-slate-100 leading-snug">
-                              {cert.name}
+                              <BiText pt={cert.name} en={certEn.name} />
                             </h3>
                           </div>
 
@@ -121,12 +129,15 @@ const SUMMARY_METRICS = [
                               rel="noopener noreferrer"
                               class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-300/90 dark:border-slate-700 bg-white dark:bg-[#0B0F17]/90 text-xs font-mono font-semibold text-gray-700 dark:text-slate-200 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors"
                             >
-                              <span>Verificar Credencial ↗</span>
+                              <span>
+                                <BiText pt="Verificar Credencial ↗" en="Verify Credential ↗" />
+                              </span>
                             </a>
 
                             <button
                               type="button"
                               data-cert-toggle
+                              data-cert-name={cert.name}
                               aria-expanded="false"
                               aria-controls={panelId}
                               aria-label={`Expandir detalhes de ${cert.name}`}
@@ -152,8 +163,13 @@ const SUMMARY_METRICS = [
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-4">
+                        <div class="lang-pt flex flex-wrap gap-1.5 sm:gap-2 pt-4">
                           {cert.badges.map((badge) => (
+                            <TechBadge label={badge} variant="dark" />
+                          ))}
+                        </div>
+                        <div class="lang-en flex flex-wrap gap-1.5 sm:gap-2 pt-4">
+                          {certEn.badges.map((badge) => (
                             <TechBadge label={badge} variant="dark" />
                           ))}
                         </div>
@@ -170,27 +186,39 @@ const SUMMARY_METRICS = [
                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border font-semibold"
                                     style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 35%, transparent); background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);"
                                   >
-                                    Carga: {cert.workload}
+                                    <BiText
+                                      pt={`Carga: ${cert.workload}`}
+                                      en={`Workload: ${certEn.workload}`}
+                                    />
                                   </span>
                                 </div>
 
                                 <ul class="space-y-3">
-                                  {cert.pillars.map((pillar) => (
-                                    <li class="flex items-start gap-2.5 text-xs sm:text-sm leading-relaxed">
-                                      <span
-                                        class="inline-block w-1.5 h-1.5 rounded-full mt-2 shrink-0 transition-colors duration-300"
-                                        style="background-color: var(--accent-color)"
-                                      />
-                                      <div>
-                                        <span class="font-semibold text-gray-900 dark:text-slate-100">
-                                          {pillar.title}:
-                                        </span>{" "}
-                                        <span class="text-gray-600 dark:text-slate-300">
-                                          {pillar.detail}
-                                        </span>
-                                      </div>
-                                    </li>
-                                  ))}
+                                  {cert.pillars.map((pillar, pIdx) => {
+                                    const pillarEn = certEn.pillars[pIdx] ?? pillar;
+                                    return (
+                                      <li class="flex items-start gap-2.5 text-xs sm:text-sm leading-relaxed">
+                                        <span
+                                          class="inline-block w-1.5 h-1.5 rounded-full mt-2 shrink-0 transition-colors duration-300"
+                                          style="background-color: var(--accent-color)"
+                                        />
+                                        <div>
+                                          <span class="font-semibold text-gray-900 dark:text-slate-100">
+                                            <BiText
+                                              pt={`${pillar.title}:`}
+                                              en={`${pillarEn.title}:`}
+                                            />
+                                          </span>{" "}
+                                          <span class="text-gray-600 dark:text-slate-300">
+                                            <BiText
+                                              pt={pillar.detail}
+                                              en={pillarEn.detail}
+                                            />
+                                          </span>
+                                        </div>
+                                      </li>
+                                    );
+                                  })}
                                 </ul>
 
                                 <div class="pt-1 sm:hidden">
@@ -201,7 +229,7 @@ const SUMMARY_METRICS = [
                                     class="inline-flex items-center gap-1.5 text-xs font-mono font-semibold hover:opacity-80"
                                     style="color: var(--accent-color)"
                                   >
-                                    Verificar Credencial ↗
+                                    <BiText pt="Verificar Credencial ↗" en="Verify Credential ↗" />
                                   </a>
                                 </div>
                               </div>
@@ -213,13 +241,14 @@ const SUMMARY_METRICS = [
                                   data-lightbox-open
                                   data-lightbox-src={cert.imageUrl}
                                   data-lightbox-title={cert.name}
+                                  data-lightbox-title-en={certEn.name}
                                   data-lightbox-verify={cert.verifyUrl}
                                   class="group/preview relative w-full text-left rounded-xl border border-gray-200 dark:border-slate-700/80 bg-white dark:bg-[#0B0F17]/90 p-2 shadow-sm transition-all duration-300 hover:border-[var(--accent-color)] hover:shadow-md cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-color)]"
                                 >
                                   <div class="relative overflow-hidden rounded-lg border border-slate-300/60 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-900">
                                     <img
                                       src={cert.imageUrl}
-                                      alt={`Diploma oficial: ${cert.name}`}
+                                      alt={`Official certificate: ${cert.name}`}
                                       loading="lazy"
                                       decoding="async"
                                       onerror="this.classList.add('hidden'); this.nextElementSibling?.classList.remove('hidden');"
@@ -229,7 +258,9 @@ const SUMMARY_METRICS = [
                                       class="hidden w-full aspect-[4/3] flex flex-col items-center justify-center gap-2 p-4 text-center font-mono text-xs text-slate-500 dark:text-slate-400"
                                       aria-hidden="true"
                                     >
-                                      <span>Preview indisponível</span>
+                                      <span>
+                                        <BiText pt="Preview indisponível" en="Preview unavailable" />
+                                      </span>
                                       <span class="text-[11px] opacity-80">{cert.name}</span>
                                     </div>
                                   </div>
@@ -254,7 +285,7 @@ const SUMMARY_METRICS = [
                                         <path d="M10 7l0 6" />
                                         <path d="M21 21l-6 -6" />
                                       </svg>
-                                      Clique para ampliar
+                                      <BiText pt="Clique para ampliar" en="Click to enlarge" />
                                     </span>
                                     <span class="text-[10px] font-mono text-gray-400 dark:text-slate-500">
                                       PNG HD
@@ -270,58 +301,64 @@ const SUMMARY_METRICS = [
                   );
                 })}
 
-                {config.complementaryCertifications &&
-                  config.complementaryCertifications.length > 0 && (
+                {pt.complementaryCertifications &&
+                  pt.complementaryCertifications.length > 0 && (
                     <div class="pt-4 border-t border-gray-200/80 dark:border-slate-800/90 space-y-3">
                       <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">
-                        CREDENCIAIS COMPLEMENTARES &amp; GESTÃO
+                        <BiText
+                          pt="CREDENCIAIS COMPLEMENTARES & GESTÃO"
+                          en="COMPLEMENTARY CREDENTIALS & MANAGEMENT"
+                        />
                       </p>
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {config.complementaryCertifications.map((comp) => (
-                          <div class="rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-3.5 flex flex-col justify-between gap-2.5 transition-colors duration-200 hover:bg-white dark:hover:bg-[#111827] hover:border-[var(--accent-color)]/60">
-                            <div class="flex items-start gap-3">
-                              <div class="shrink-0 h-9 w-12 rounded-lg border border-gray-200/80 dark:border-slate-800 bg-white dark:bg-[#0B0F17]/90 px-1.5 flex items-center justify-center">
-                                <img
-                                  src={comp.logoSrc}
-                                  alt={comp.issuer}
-                                  loading="lazy"
-                                  decoding="async"
-                                  class={`max-h-5 w-auto object-contain ${
-                                    comp.invertOnDark
-                                      ? "dark:brightness-0 dark:invert"
-                                      : ""
-                                  }`.trim()}
-                                />
+                        {pt.complementaryCertifications.map((comp, cIdx) => {
+                          const compEn = en.complementaryCertifications?.[cIdx] ?? comp;
+                          return (
+                            <div class="rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-3.5 flex flex-col justify-between gap-2.5 transition-colors duration-200 hover:bg-white dark:hover:bg-[#111827] hover:border-[var(--accent-color)]/60">
+                              <div class="flex items-start gap-3">
+                                <div class="shrink-0 h-9 w-12 rounded-lg border border-gray-200/80 dark:border-slate-800 bg-white dark:bg-[#0B0F17]/90 px-1.5 flex items-center justify-center">
+                                  <img
+                                    src={comp.logoSrc}
+                                    alt={comp.issuer}
+                                    loading="lazy"
+                                    decoding="async"
+                                    class={`max-h-5 w-auto object-contain ${
+                                      comp.invertOnDark
+                                        ? "dark:brightness-0 dark:invert"
+                                        : ""
+                                    }`.trim()}
+                                  />
+                                </div>
+                                <div class="min-w-0">
+                                  <p class="text-[11px] font-mono text-gray-500 dark:text-slate-400 leading-none">
+                                    {comp.issuer}
+                                  </p>
+                                  <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-slate-100 leading-snug mt-1">
+                                    {comp.title}
+                                  </h3>
+                                  <p class="text-[11px] text-gray-600 dark:text-slate-300 mt-0.5 leading-snug">
+                                    <BiText pt={comp.subtitle} en={compEn.subtitle} />
+                                  </p>
+                                </div>
                               </div>
-                              <div class="min-w-0">
-                                <p class="text-[11px] font-mono text-gray-500 dark:text-slate-400 leading-none">
-                                  {comp.issuer}
-                                </p>
-                                <h3 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-slate-100 leading-snug mt-1">
-                                  {comp.title}
-                                </h3>
-                                <p class="text-[11px] text-gray-600 dark:text-slate-300 mt-0.5 leading-snug">
-                                  {comp.subtitle}
-                                </p>
-                              </div>
-                            </div>
 
-                            <div class="flex items-center justify-between gap-2 pt-2 border-t border-gray-200/70 dark:border-slate-800/80 text-[11px] font-mono">
-                              <span class="text-gray-500 dark:text-slate-400">
-                                ID: {comp.credentialId}
-                              </span>
-                              <a
-                                href={comp.verifyUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="font-semibold hover:opacity-80 transition-opacity"
-                                style="color: var(--accent-color)"
-                              >
-                                Verificar ↗
-                              </a>
+                              <div class="flex items-center justify-between gap-2 pt-2 border-t border-gray-200/70 dark:border-slate-800/80 text-[11px] font-mono">
+                                <span class="text-gray-500 dark:text-slate-400">
+                                  ID: {comp.credentialId}
+                                </span>
+                                <a
+                                  href={comp.verifyUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="font-semibold hover:opacity-80 transition-opacity"
+                                  style="color: var(--accent-color)"
+                                >
+                                  <BiText pt="Verificar ↗" en="Verify ↗" />
+                                </a>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -356,7 +393,7 @@ const SUMMARY_METRICS = [
                 rel="noopener noreferrer"
                 class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900 text-[11px] font-mono font-semibold text-slate-200 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors"
               >
-                Verificar Credencial ↗
+                <BiText pt="Verificar Credencial ↗" en="Verify Credential ↗" />
               </a>
               <button
                 type="button"
@@ -443,6 +480,26 @@ const SUMMARY_METRICS = [
   const closeBtn = lightbox?.querySelector<HTMLElement>("[data-lightbox-close]");
   let lastTrigger: HTMLElement | null = null;
 
+  const syncCertAria = () => {
+    const isEn = document.documentElement.dataset.lang === "en";
+    document.querySelectorAll<HTMLElement>("[data-cert-toggle]").forEach((btn) => {
+      const name = btn.getAttribute("data-cert-name") ?? "";
+      btn.setAttribute(
+        "aria-label",
+        isEn ? `Toggle details for ${name}` : `Expandir detalhes de ${name}`
+      );
+    });
+    if (closeBtn) {
+      closeBtn.setAttribute(
+        "aria-label",
+        isEn ? "Close certificate preview" : "Fechar visualização do certificado"
+      );
+    }
+  };
+
+  syncCertAria();
+  window.addEventListener("portfolio:langchange", syncCertAria);
+
   const closeLightbox = () => {
     if (!lightbox) return;
     lightbox.classList.add("hidden");
@@ -454,13 +511,19 @@ const SUMMARY_METRICS = [
   document.querySelectorAll<HTMLElement>("[data-lightbox-open]").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (!lightbox || !lightboxImg) return;
+      const isEn = document.documentElement.dataset.lang === "en";
       const src = btn.getAttribute("data-lightbox-src") ?? "";
-      const title = btn.getAttribute("data-lightbox-title") ?? "";
+      const title =
+        (isEn
+          ? btn.getAttribute("data-lightbox-title-en")
+          : btn.getAttribute("data-lightbox-title")) ?? "";
       const verify = btn.getAttribute("data-lightbox-verify") ?? "#";
 
       lastTrigger = btn;
       lightboxImg.src = src;
-      lightboxImg.alt = `Diploma oficial em alta resolução: ${title}`;
+      lightboxImg.alt = isEn
+        ? `High-resolution official certificate: ${title}`
+        : `Diploma oficial em alta resolução: ${title}`;
       if (lightboxTitle) lightboxTitle.textContent = title;
       if (lightboxVerify) lightboxVerify.href = verify;
 

@@ -1,5 +1,7 @@
 ---
 import { profileEntries, withBase } from "../config";
+import { profileBilingualEntries } from "../i18n/configs";
+import BiText from "./BiText.astro";
 
 const hasEducation = profileEntries.some(
   ({ config }) => config.education.length > 0
@@ -15,7 +17,7 @@ const hasEducation = profileEntries.some(
           <div class="lg:col-span-4 space-y-5">
             <div>
               <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-slate-100">
-                Formação
+                <BiText pt="Formação" en="Education" />
               </h2>
               <div
                 class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
@@ -23,12 +25,16 @@ const hasEducation = profileEntries.some(
               />
             </div>
             <p class="mode-clt text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-              Base acadêmica em Comércio Exterior aplicada diretamente à
-              engenharia de dados financeiros, câmbio e regras tributárias.
+              <BiText
+                pt="Base acadêmica em Comércio Exterior aplicada diretamente à engenharia de dados financeiros, câmbio e regras tributárias."
+                en="Academic background in Foreign Trade applied directly to financial data engineering, FX settlement, and cascading tax logic."
+              />
             </p>
             <p class="mode-freela text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-              Conhecimento real de importação e finanças traduzido em sistemas
-              que eliminam planilhas e erros de cálculo.
+              <BiText
+                pt="Conhecimento real de importação e finanças traduzido em sistemas que eliminam planilhas e erros de cálculo."
+                en="Hands-on global trade and finance expertise translated into automated systems that eliminate spreadsheets and calculation errors."
+              />
             </p>
 
             {/* Card Animado de Impacto no Scroll */}
@@ -36,9 +42,10 @@ const hasEducation = profileEntries.some(
               data-edu-reveal
               class="edu-reveal-card opacity-0 translate-y-3 transition-all duration-500 ease-out rounded-xl sm:rounded-2xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-4 sm:p-5"
             >
-              {profileEntries.map(({ modeClass, config }) => {
-                const edu = config.education[0];
-                if (!edu?.impactItems?.length) return null;
+              {profileBilingualEntries.map(({ modeClass, pt, en }) => {
+                const eduPt = pt.education[0];
+                const eduEn = en.education[0] ?? eduPt;
+                if (!eduPt?.impactItems?.length) return null;
                 return (
                   <div class={`${modeClass} space-y-3.5`}>
                     <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-gray-200/80 dark:border-slate-800">
@@ -46,32 +53,38 @@ const hasEducation = profileEntries.some(
                         class="text-xs font-mono font-bold uppercase tracking-wider"
                         style="color: var(--accent-color)"
                       >
-                        {edu.impactTitle}
+                        <BiText
+                          pt={eduPt.impactTitle ?? ""}
+                          en={eduEn.impactTitle ?? eduPt.impactTitle ?? ""}
+                        />
                       </span>
                       <span class="text-[10px] font-mono text-gray-400 dark:text-slate-500">
-                        Comex × Dados
+                        <BiText pt="Comex × Dados" en="Trade × Data" />
                       </span>
                     </div>
 
                     <ol class="space-y-3">
-                      {edu.impactItems.map((item, idx) => (
-                        <li class="flex items-start gap-2.5 text-xs sm:text-[13px] leading-relaxed">
-                          <span
-                            class="mt-0.5 font-mono text-xs font-semibold shrink-0 transition-colors duration-300"
-                            style="color: var(--accent-color)"
-                          >
-                            0{idx + 1}
-                          </span>
-                          <div>
-                            <strong class="font-semibold text-gray-900 dark:text-slate-100">
-                              {item.name}:
-                            </strong>{" "}
-                            <span class="text-gray-600 dark:text-slate-300">
-                              {item.detail}
+                      {eduPt.impactItems.map((item, idx) => {
+                        const itemEn = eduEn.impactItems?.[idx] ?? item;
+                        return (
+                          <li class="flex items-start gap-2.5 text-xs sm:text-[13px] leading-relaxed">
+                            <span
+                              class="mt-0.5 font-mono text-xs font-semibold shrink-0 transition-colors duration-300"
+                              style="color: var(--accent-color)"
+                            >
+                              0{idx + 1}
                             </span>
-                          </div>
-                        </li>
-                      ))}
+                            <div>
+                              <strong class="font-semibold text-gray-900 dark:text-slate-100">
+                                <BiText pt={`${item.name}:`} en={`${itemEn.name}:`} />
+                              </strong>{" "}
+                              <span class="text-gray-600 dark:text-slate-300">
+                                <BiText pt={item.detail} en={itemEn.detail} />
+                              </span>
+                            </div>
+                          </li>
+                        );
+                      })}
                     </ol>
                   </div>
                 );
@@ -80,108 +93,123 @@ const hasEducation = profileEntries.some(
           </div>
 
           <div class="lg:col-span-8">
-            {profileEntries.map(({ modeClass, config }) => (
+            {profileBilingualEntries.map(({ modeClass, pt, en }) => (
               <div class={`${modeClass} space-y-8`}>
-                {config.education.map((edu) => (
-                  <article class="bg-white dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl shadow-sm border border-gray-200/90 dark:border-slate-800 p-5 sm:p-6 md:p-8 hover:shadow-md hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60 transition-all duration-300">
-                    {/* Topo do card: Badge de destaque + Previsão */}
-                    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-gray-100 dark:border-slate-800">
-                      <span
-                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border transition-colors duration-300"
-                        style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 38%, transparent); background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);"
-                      >
+                {pt.education.map((edu, eduIdx) => {
+                  const eduEn = en.education[eduIdx] ?? edu;
+                  return (
+                    <article class="bg-white dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl shadow-sm border border-gray-200/90 dark:border-slate-800 p-5 sm:p-6 md:p-8 hover:shadow-md hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60 transition-all duration-300">
+                      {/* Topo do card: Badge de destaque + Previsão */}
+                      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-gray-100 dark:border-slate-800">
                         <span
-                          class="w-1.5 h-1.5 rounded-full"
-                          style="background-color: var(--accent-color)"
-                        />
-                        Diferencial de Domínio • Finanças &amp; Comex
-                      </span>
-
-                      <span class="text-xs sm:text-sm font-mono text-gray-500 dark:text-slate-400">
-                        {edu.dateRange}
-                      </span>
-                    </div>
-
-                    {/* Identidade do curso com Logo Oficial da PUCRS */}
-                    <div class="flex items-start gap-3.5 sm:gap-4 mb-5">
-                      <div class="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center shadow-sm shrink-0">
-                        <img
-                          src={withBase("icons/PUCRS.png")}
-                          alt="PUCRS"
-                          loading="lazy"
-                          decoding="async"
-                          onerror={`if(!this.dataset.fb1){this.dataset.fb1='1';this.src='${withBase("icons/pucrs.png")}';}else if(!this.dataset.fb2){this.dataset.fb2='1';this.src='${withBase("icons/pucrs.svg")}';}else{this.classList.add('hidden');this.nextElementSibling?.classList.remove('hidden');}`}
-                          class="w-full h-full object-cover scale-105"
-                        />
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="#1d4ed8"
-                          stroke-width="1.8"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          aria-hidden="true"
-                          class="hidden w-6 h-6"
+                          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border transition-colors duration-300"
+                          style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 38%, transparent); background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);"
                         >
-                          <path d="M12 3l8 4.5v5c0 4.5-3.4 7.7-8 8.5-4.6-.8-8-4-8-8.5v-5l8-4.5z" />
-                        </svg>
-                      </div>
-
-                      <div class="min-w-0">
-                        <h3 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-slate-100 leading-snug">
-                          {edu.degree}
-                        </h3>
-                        <p
-                          class="text-sm sm:text-base font-medium mt-0.5 transition-colors duration-300"
-                          style="color: var(--accent-color)"
-                        >
-                          {edu.school}
-                        </p>
-                      </div>
-                    </div>
-
-                    <ul class="space-y-2 mb-6">
-                      {edu.achievements.map((achievement) => (
-                        <li class="flex items-start">
                           <span
-                            class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0"
+                            class="w-1.5 h-1.5 rounded-full"
                             style="background-color: var(--accent-color)"
                           />
-                          <span class="text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-                            {achievement}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                          <BiText
+                            pt="Diferencial de Domínio • Finanças & Comex"
+                            en="Domain Edge • Finance & Global Trade"
+                          />
+                        </span>
 
-                    {edu.domainSkills && edu.domainSkills.length > 0 && (
-                      <div class="pt-5 border-t border-gray-100 dark:border-slate-800">
-                        <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-3">
-                          Competências de Domínio Aplicadas
-                        </p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {edu.domainSkills.map((skill, idx) => (
-                            <div class="rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#0B0F17]/90 p-3.5 sm:p-4 transition-colors duration-300 hover:border-[var(--accent-color)]/60">
-                              <span
-                                class="text-[11px] font-mono font-semibold transition-colors duration-300"
-                                style="color: var(--accent-color)"
-                              >
-                                0{idx + 1}
-                              </span>
-                              <h4 class="text-sm font-bold text-gray-900 dark:text-slate-100 mt-1 leading-snug">
-                                {skill.name}
-                              </h4>
-                              <p class="text-xs sm:text-[13px] text-gray-600 dark:text-slate-300 leading-relaxed mt-1">
-                                {skill.detail}
-                              </p>
-                            </div>
-                          ))}
+                        <span class="text-xs sm:text-sm font-mono text-gray-500 dark:text-slate-400">
+                          <BiText pt={edu.dateRange} en={eduEn.dateRange} />
+                        </span>
+                      </div>
+
+                      {/* Identidade do curso com Logo Oficial da PUCRS */}
+                      <div class="flex items-start gap-3.5 sm:gap-4 mb-5">
+                        <div class="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center shadow-sm shrink-0">
+                          <img
+                            src={withBase("icons/PUCRS.png")}
+                            alt="PUCRS"
+                            loading="lazy"
+                            decoding="async"
+                            onerror={`if(!this.dataset.fb1){this.dataset.fb1='1';this.src='${withBase("icons/pucrs.png")}';}else if(!this.dataset.fb2){this.dataset.fb2='1';this.src='${withBase("icons/pucrs.svg")}';}else{this.classList.add('hidden');this.nextElementSibling?.classList.remove('hidden');}`}
+                            class="w-full h-full object-cover scale-105"
+                          />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#1d4ed8"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                            class="hidden w-6 h-6"
+                          >
+                            <path d="M12 3l8 4.5v5c0 4.5-3.4 7.7-8 8.5-4.6-.8-8-4-8-8.5v-5l8-4.5z" />
+                          </svg>
+                        </div>
+
+                        <div class="min-w-0">
+                          <h3 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-slate-100 leading-snug">
+                            <BiText pt={edu.degree} en={eduEn.degree} />
+                          </h3>
+                          <p
+                            class="text-sm sm:text-base font-medium mt-0.5 transition-colors duration-300"
+                            style="color: var(--accent-color)"
+                          >
+                            <BiText pt={edu.school} en={eduEn.school} />
+                          </p>
                         </div>
                       </div>
-                    )}
-                  </article>
-                ))}
+
+                      <ul class="space-y-2 mb-6">
+                        {edu.achievements.map((achievement, aIdx) => (
+                          <li class="flex items-start">
+                            <span
+                              class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0"
+                              style="background-color: var(--accent-color)"
+                            />
+                            <span class="text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
+                              <BiText
+                                pt={achievement}
+                                en={eduEn.achievements[aIdx] ?? achievement}
+                              />
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {edu.domainSkills && edu.domainSkills.length > 0 && (
+                        <div class="pt-5 border-t border-gray-100 dark:border-slate-800">
+                          <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-3">
+                            <BiText
+                              pt="Competências de Domínio Aplicadas"
+                              en="Applied Domain Capabilities"
+                            />
+                          </p>
+                          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {edu.domainSkills.map((skill, idx) => {
+                              const skillEn = eduEn.domainSkills?.[idx] ?? skill;
+                              return (
+                                <div class="rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#0B0F17]/90 p-3.5 sm:p-4 transition-colors duration-300 hover:border-[var(--accent-color)]/60">
+                                  <span
+                                    class="text-[11px] font-mono font-semibold transition-colors duration-300"
+                                    style="color: var(--accent-color)"
+                                  >
+                                    0{idx + 1}
+                                  </span>
+                                  <h4 class="text-sm font-bold text-gray-900 dark:text-slate-100 mt-1 leading-snug">
+                                    <BiText pt={skill.name} en={skillEn.name} />
+                                  </h4>
+                                  <p class="text-xs sm:text-[13px] text-gray-600 dark:text-slate-300 leading-relaxed mt-1">
+                                    <BiText pt={skill.detail} en={skillEn.detail} />
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             ))}
           </div>

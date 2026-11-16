@@ -1,16 +1,10 @@
 ---
 import { freelaConfig } from "../config";
+import { freelaConfigEn, getPackageContactHref } from "../i18n/configs";
+import BiText from "./BiText.astro";
 
 const packages = freelaConfig.packages ?? [];
-
-function getPackageContactHref(packageName: string): string {
-  const baseWhatsapp = freelaConfig.social.whatsapp;
-  if (!baseWhatsapp) {
-    return freelaConfig.cta.href;
-  }
-  const message = `Olá Hugo, vim pelo seu portfólio e tenho interesse no ${packageName}. Gostaria de solicitar um diagnóstico técnico.`;
-  return `${baseWhatsapp}?text=${encodeURIComponent(message)}`;
-}
+const packagesEn = freelaConfigEn.packages ?? [];
 ---
 
 {
@@ -24,7 +18,7 @@ function getPackageContactHref(packageName: string): string {
           <div class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start space-y-5">
             <div>
               <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-slate-100">
-                Pacotes B2B
+                <BiText pt="Pacotes B2B" en="B2B Packages" />
               </h2>
               <div
                 class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
@@ -32,14 +26,16 @@ function getPackageContactHref(packageName: string): string {
               />
             </div>
             <p class="text-sm sm:text-base text-gray-600 dark:text-slate-300 leading-relaxed">
-              Escopo fechado, prazo claro e entrega containerizada em Docker
-              Compose para eliminar trabalho manual e reduzir riscos operacionais.
+              <BiText
+                pt="Escopo fechado, prazo claro e entrega containerizada em Docker Compose para eliminar trabalho manual e reduzir riscos operacionais."
+                en="Fixed scope, transparent timelines, and containerized Docker Compose delivery to eliminate manual busywork and cut operational risk."
+              />
             </p>
 
             {/* Mini-checklist Processo de Entrega */}
             <div class="rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-4 space-y-3">
               <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">
-                Processo de Entrega
+                <BiText pt="Processo de Entrega" en="Delivery Process" />
               </p>
               <ol class="space-y-2.5 text-xs sm:text-sm font-mono text-gray-700 dark:text-slate-300">
                 <li class="flex items-center gap-2.5">
@@ -49,7 +45,12 @@ function getPackageContactHref(packageName: string): string {
                   >
                     ✓
                   </span>
-                  <span>01. Diagnóstico Técnico 15m</span>
+                  <span>
+                    <BiText
+                      pt="01. Diagnóstico Técnico 15m"
+                      en="01. 15-Min Tech Diagnostic"
+                    />
+                  </span>
                 </li>
                 <li class="flex items-center gap-2.5">
                   <span
@@ -58,7 +59,12 @@ function getPackageContactHref(packageName: string): string {
                   >
                     ✓
                   </span>
-                  <span>02. Escopo &amp; Prazo Fechado</span>
+                  <span>
+                    <BiText
+                      pt="02. Escopo & Prazo Fechado"
+                      en="02. Fixed Scope & Timeline"
+                    />
+                  </span>
                 </li>
                 <li class="flex items-center gap-2.5">
                   <span
@@ -67,7 +73,12 @@ function getPackageContactHref(packageName: string): string {
                   >
                     ✓
                   </span>
-                  <span>03. Deploy Docker + Logs</span>
+                  <span>
+                    <BiText
+                      pt="03. Deploy Docker + Logs"
+                      en="03. Docker Deploy + Audit Logs"
+                    />
+                  </span>
                 </li>
               </ol>
             </div>
@@ -76,86 +87,131 @@ function getPackageContactHref(packageName: string): string {
               href={freelaConfig.cta.href}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-xs sm:text-sm font-mono font-semibold text-gray-800 dark:text-slate-200 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors duration-200"
+              class="lang-pt inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-xs sm:text-sm font-mono font-semibold text-gray-800 dark:text-slate-200 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors duration-200"
             >
               <span>Falar no WhatsApp ↗</span>
+            </a>
+            <a
+              href={freelaConfigEn.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lang-en inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-xs sm:text-sm font-mono font-semibold text-gray-800 dark:text-slate-200 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors duration-200"
+            >
+              <span>Message on WhatsApp ↗</span>
             </a>
           </div>
 
           <div class="lg:col-span-8">
             <div class="space-y-6">
-              {packages.map((pkg, index) => (
-                <article class="p-4 sm:p-6 md:p-8 bg-gray-50 dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-800 transition-all duration-300 hover:bg-white dark:hover:bg-[#111827] hover:shadow-lg hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60">
-                  <div class="space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                      <span
-                        class="text-sm font-mono font-semibold"
-                        style="color: var(--accent-color)"
-                      >
-                        0{index + 1}
-                      </span>
-                      <span
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium border"
-                        style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 38%, transparent); background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);"
-                      >
-                        Prazo: {pkg.sla}
-                      </span>
-                    </div>
-
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
-                      {pkg.name}
-                    </h3>
-
-                    <p class="text-base sm:text-lg text-gray-600 dark:text-slate-300 leading-relaxed">
-                      {pkg.painSolved}
-                    </p>
-
-                    <ul class="space-y-2 pt-1">
-                      {pkg.deliverables.map((item) => (
-                        <li class="flex items-start text-sm sm:text-base text-gray-600 dark:text-slate-300">
-                          <span
-                            class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0"
-                            style="background-color: var(--accent-color)"
-                          />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div class="pt-4 border-t border-gray-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                      <span class="text-xs sm:text-sm font-mono text-gray-500 dark:text-slate-400">
-                        {pkg.proofAnchor}
-                      </span>
-                      <a
-                        href={getPackageContactHref(pkg.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold transition-opacity hover:opacity-80"
-                        style="color: var(--accent-color)"
-                      >
-                        Solicitar este pacote
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          aria-hidden="true"
+              {packages.map((pkg, index) => {
+                const pkgEn = packagesEn[index] ?? pkg;
+                return (
+                  <article class="p-4 sm:p-6 md:p-8 bg-gray-50 dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-800 transition-all duration-300 hover:bg-white dark:hover:bg-[#111827] hover:shadow-lg hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60">
+                    <div class="space-y-4">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span
+                          class="text-sm font-mono font-semibold"
+                          style="color: var(--accent-color)"
                         >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path d="M5 12l14 0" />
-                          <path d="M13 18l6 -6" />
-                          <path d="M13 6l6 6" />
-                        </svg>
-                      </a>
+                          0{index + 1}
+                        </span>
+                        <span
+                          class="inline-flex items-center px-3 py-1 rounded-full text-xs sm:text-sm font-medium border"
+                          style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 38%, transparent); background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);"
+                        >
+                          <BiText
+                            pt={`Prazo: ${pkg.sla}`}
+                            en={`Timeline: ${pkgEn.sla}`}
+                          />
+                        </span>
+                      </div>
+
+                      <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100">
+                        <BiText pt={pkg.name} en={pkgEn.name} />
+                      </h3>
+
+                      <p class="text-base sm:text-lg text-gray-600 dark:text-slate-300 leading-relaxed">
+                        <BiText pt={pkg.painSolved} en={pkgEn.painSolved} />
+                      </p>
+
+                      <ul class="space-y-2 pt-1">
+                        {pkg.deliverables.map((item, dIdx) => (
+                          <li class="flex items-start text-sm sm:text-base text-gray-600 dark:text-slate-300">
+                            <span
+                              class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0"
+                              style="background-color: var(--accent-color)"
+                            />
+                            <span>
+                              <BiText
+                                pt={item}
+                                en={pkgEn.deliverables[dIdx] ?? item}
+                              />
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div class="pt-4 border-t border-gray-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <span class="text-xs sm:text-sm font-mono text-gray-500 dark:text-slate-400">
+                          <BiText pt={pkg.proofAnchor} en={pkgEn.proofAnchor} />
+                        </span>
+                        <a
+                          href={getPackageContactHref(pkg.name, "pt")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="lang-pt inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold transition-opacity hover:opacity-80"
+                          style="color: var(--accent-color)"
+                        >
+                          Solicitar este pacote
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M5 12l14 0" />
+                            <path d="M13 18l6 -6" />
+                            <path d="M13 6l6 6" />
+                          </svg>
+                        </a>
+                        <a
+                          href={getPackageContactHref(pkgEn.name, "en")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="lang-en inline-flex items-center gap-1.5 text-sm sm:text-base font-semibold transition-opacity hover:opacity-80"
+                          style="color: var(--accent-color)"
+                        >
+                          Request this package
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M5 12l14 0" />
+                            <path d="M13 18l6 -6" />
+                            <path d="M13 6l6 6" />
+                          </svg>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
           </div>
         </div>

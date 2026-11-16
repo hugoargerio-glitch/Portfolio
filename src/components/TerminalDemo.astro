@@ -1,10 +1,13 @@
 ---
+import BiText from "./BiText.astro";
+
 interface Props {
   repo: string;
 }
 
 interface CliLine {
-  text: string;
+  pt: string;
+  en: string;
   tone?: "ok" | "metric" | "warn" | "plain";
 }
 
@@ -18,31 +21,38 @@ const CLI_DEMOS: Record<string, CliDemoConfig> = {
     command: "make fetch-ptax && make verify",
     lines: [
       {
-        text: "[INFO] src.extractors.bacen_ptax_client :: Olinda CotacaoMoedaPeriodo (USD, EUR, CHF)",
+        pt: "[INFO] src.extractors.bacen_ptax_client :: Olinda CotacaoMoedaPeriodo (USD, EUR, CHF)",
+        en: "[INFO] src.extractors.bacen_ptax_client :: Olinda CotacaoMoedaPeriodo (USD, EUR, CHF)",
         tone: "metric",
       },
       {
-        text: "[OK] 18 cotacoes PTAX + LOCF forward-fill -> dim_currency_ptax (Decimal 19,6)",
+        pt: "[OK] 18 cotacoes PTAX + LOCF forward-fill -> dim_currency_ptax (Decimal 19,6)",
+        en: "[OK] 18 PTAX quotes + LOCF forward-fill -> dim_currency_ptax (Decimal 19,6)",
         tone: "ok",
       },
       {
-        text: "[PASS] ODCS v3.2.0 lint (contracts/comex_fiduciary_engine_v2.odcs.yaml)",
+        pt: "[PASS] ODCS v3.2.0 lint (contracts/comex_fiduciary_engine_v2.odcs.yaml)",
+        en: "[PASS] ODCS v3.2.0 lint (contracts/comex_fiduciary_engine_v2.odcs.yaml)",
         tone: "ok",
       },
       {
-        text: "[OK] Double-entry zero-sum check: SUM(debit) - SUM(credit) = 0.0000",
+        pt: "[OK] Double-entry zero-sum check: SUM(debit) - SUM(credit) = 0.0000",
+        en: "[OK] Double-entry zero-sum check: SUM(debit) - SUM(credit) = 0.0000",
         tone: "metric",
       },
       {
-        text: "[GUARD] trg_journal_lines_immutable -> UPDATE/DELETE bloqueado (prevent_journal_mutation)",
+        pt: "[GUARD] trg_journal_lines_immutable -> UPDATE/DELETE bloqueado (prevent_journal_mutation)",
+        en: "[GUARD] trg_journal_lines_immutable -> UPDATE/DELETE blocked (prevent_journal_mutation)",
         tone: "warn",
       },
       {
-        text: "[WARN] comex_quarantine_hitl: 1 fatura isolada (PENDING_REVIEW) para auditoria HITL",
+        pt: "[WARN] comex_quarantine_hitl: 1 fatura isolada (PENDING_REVIEW) para auditoria HITL",
+        en: "[WARN] comex_quarantine_hitl: 1 invoice isolated (PENDING_REVIEW) for HITL audit",
         tone: "warn",
       },
       {
-        text: "[PASS] 34 assertions passed in 2.14s (PG16 + MongoDB 7 + DuckDB HTAP)",
+        pt: "[PASS] 34 assertions passed in 2.14s (PG16 + MongoDB 7 + DuckDB HTAP)",
+        en: "[PASS] 34 assertions passed in 2.14s (PG16 + MongoDB 7 + DuckDB HTAP)",
         tone: "ok",
       },
     ],
@@ -51,27 +61,33 @@ const CLI_DEMOS: Record<string, CliDemoConfig> = {
     command: "airflow dags trigger macroflow_medallion_elt",
     lines: [
       {
-        text: "[OK] Pydantic v2 Shift-Left (BCBRecord, MarketRecord :: allow_inf_nan=False) PASS",
+        pt: "[OK] Pydantic v2 Shift-Left (BCBRecord, MarketRecord :: allow_inf_nan=False) PASS",
+        en: "[OK] Pydantic v2 Shift-Left (BCBRecord, MarketRecord :: allow_inf_nan=False) PASS",
         tone: "ok",
       },
       {
-        text: "[INFO] Hive partition -> /Volumes/macroflow/bronze/raw_data/year=2026/month=11/day=16",
+        pt: "[INFO] Hive partition -> /Volumes/macroflow/bronze/raw_data/year=2026/month=11/day=16",
+        en: "[INFO] Hive partition -> /Volumes/macroflow/bronze/raw_data/year=2026/month=11/day=16",
         tone: "metric",
       },
       {
-        text: "[OK] Silver Delta MERGE INTO macroflow_silver.market_conformed (Decimal 18,8)",
+        pt: "[OK] Silver Delta MERGE INTO macroflow_silver.market_conformed (Decimal 18,8)",
+        en: "[OK] Silver Delta MERGE INTO macroflow_silver.market_conformed (Decimal 18,8)",
         tone: "ok",
       },
       {
-        text: "[OK] Gold Fisher Real Rate (IPCA 40d lag guard, vol sqrt(252)/sqrt(365))",
+        pt: "[OK] Gold Fisher Real Rate (IPCA 40d lag guard, vol sqrt(252)/sqrt(365))",
+        en: "[OK] Gold Fisher Real Rate (IPCA 40d lag guard, vol sqrt(252)/sqrt(365))",
         tone: "ok",
       },
       {
-        text: "[INFO] LightGBM CQR 95% (@champion): D+1 USD/BRL = 5.2410 [5.1820 .. 5.3015]",
+        pt: "[INFO] LightGBM CQR 95% (@champion): D+1 USD/BRL = 5.2410 [5.1820 .. 5.3015]",
+        en: "[INFO] LightGBM CQR 95% (@champion): D+1 USD/BRL = 5.2410 [5.1820 .. 5.3015]",
         tone: "metric",
       },
       {
-        text: "[OK] Snowflake Kimball sync (FACT_MARKET_DAILY + FACT_MACRO_FORECASTS) :: MACROFLOW_ETL_ROLE",
+        pt: "[OK] Snowflake Kimball sync (FACT_MARKET_DAILY + FACT_MACRO_FORECASTS) :: MACROFLOW_ETL_ROLE",
+        en: "[OK] Snowflake Kimball sync (FACT_MARKET_DAILY + FACT_MACRO_FORECASTS) :: MACROFLOW_ETL_ROLE",
         tone: "ok",
       },
     ],
@@ -80,23 +96,28 @@ const CLI_DEMOS: Record<string, CliDemoConfig> = {
     command: "make run",
     lines: [
       {
-        text: "[1/3 simulate] Dual-Hash SHA-256 diff :: 0 falsos positivos em heartbeats",
+        pt: "[1/3 simulate] Dual-Hash SHA-256 diff :: 0 falsos positivos em heartbeats",
+        en: "[1/3 simulate] Dual-Hash SHA-256 diff :: 0 false positives on heartbeats",
         tone: "metric",
       },
       {
-        text: "[OK] SQLite WAL (BEGIN IMMEDIATE) persistido em 11.4ms (B-Tree lookup 0.048ms)",
+        pt: "[OK] SQLite WAL (BEGIN IMMEDIATE) persistido em 11.4ms (B-Tree lookup 0.048ms)",
+        en: "[OK] SQLite WAL (BEGIN IMMEDIATE) committed in 11.4ms (B-Tree lookup 0.048ms)",
         tone: "ok",
       },
       {
-        text: "[WARN] Circuit Breaker check: N=12, falhas=8.3% (<= 20%) | 1 item -> quarantine DLQ",
+        pt: "[WARN] Circuit Breaker check: N=12, falhas=8.3% (<= 20%) | 1 item -> quarantine DLQ",
+        en: "[WARN] Circuit Breaker check: N=12, failures=8.3% (<= 20%) | 1 item -> quarantine DLQ",
         tone: "warn",
       },
       {
-        text: "[2/3 dispatch] Transactional Outbox (PRICE_CHANGED) -> Webhook HTTP 204 No Content",
+        pt: "[2/3 dispatch] Transactional Outbox (PRICE_CHANGED) -> Webhook HTTP 204 No Content",
+        en: "[2/3 dispatch] Transactional Outbox (PRICE_CHANGED) -> Webhook HTTP 204 No Content",
         tone: "ok",
       },
       {
-        text: "[3/3 status] make status (<10ms) :: 142 SKUs ativos | Outbox PENDING: 0 | PASS",
+        pt: "[3/3 status] make status (<10ms) :: 142 SKUs ativos | Outbox PENDING: 0 | PASS",
+        en: "[3/3 status] make status (<10ms) :: 142 active SKUs | Outbox PENDING: 0 | PASS",
         tone: "metric",
       },
     ],
@@ -119,6 +140,7 @@ const demo = CLI_DEMOS[repo];
     <div
       data-terminal-demo
       data-command={demo.command}
+      data-running="false"
       class="mt-4 rounded-lg border border-slate-800 bg-[#090D16] font-mono text-xs text-slate-200 overflow-hidden shadow-md"
     >
       {/* Barra superior estilo Linux/macOS */}
@@ -139,7 +161,12 @@ const demo = CLI_DEMOS[repo];
           data-cli-run
           class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded border border-slate-700 bg-slate-800/90 text-[11px] font-semibold text-slate-200 hover:border-[var(--accent-color)] hover:text-white transition-colors cursor-pointer"
         >
-          ▶ Executar Demo
+          <span data-cli-btn-idle>
+            <BiText pt="▶ Executar Demo" en="▶ Run Demo" />
+          </span>
+          <span data-cli-btn-running class="hidden">
+            <BiText pt="Executando..." en="Running..." />
+          </span>
         </button>
       </div>
 
@@ -164,7 +191,7 @@ const demo = CLI_DEMOS[repo];
               data-cli-line
               class={`hidden opacity-0 translate-y-0.5 transition-all duration-150 whitespace-pre-wrap break-words ${TONE_CLASS[line.tone ?? "plain"]}`}
             >
-              {line.text}
+              <BiText pt={line.pt} en={line.en} />
             </div>
           ))}
         </div>
@@ -179,10 +206,18 @@ const demo = CLI_DEMOS[repo];
   document.querySelectorAll<HTMLElement>("[data-terminal-demo]").forEach((term) => {
     const cmdEl = term.querySelector<HTMLElement>("[data-cli-cmd]");
     const runBtn = term.querySelector<HTMLButtonElement>("[data-cli-run]");
+    const idleLabel = term.querySelector<HTMLElement>("[data-cli-btn-idle]");
+    const runningLabel = term.querySelector<HTMLElement>("[data-cli-btn-running]");
     const cursorEl = term.querySelector<HTMLElement>("[data-cli-cursor]");
     const lines = Array.from(term.querySelectorAll<HTMLElement>("[data-cli-line]"));
     const command = term.getAttribute("data-command") ?? "";
     let activeRunId = 0;
+
+    const setRunningState = (running: boolean) => {
+      term.setAttribute("data-running", String(running));
+      idleLabel?.classList.toggle("hidden", running);
+      runningLabel?.classList.toggle("hidden", !running);
+    };
 
     const resetTerminal = () => {
       if (cmdEl) cmdEl.textContent = "";
@@ -195,7 +230,7 @@ const demo = CLI_DEMOS[repo];
     const runSimulation = async () => {
       const runId = ++activeRunId;
       resetTerminal();
-      if (runBtn) runBtn.textContent = "Executando...";
+      setRunningState(true);
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduceMotion) {
@@ -203,7 +238,7 @@ const demo = CLI_DEMOS[repo];
         lines.forEach((line) => {
           line.classList.remove("hidden", "opacity-0", "translate-y-0.5");
         });
-        if (runBtn) runBtn.textContent = "▶ Executar Demo";
+        setRunningState(false);
         return;
       }
 
@@ -225,8 +260,8 @@ const demo = CLI_DEMOS[repo];
         await sleep(110);
       }
 
-      if (runId === activeRunId && runBtn) {
-        runBtn.textContent = "▶ Executar Demo";
+      if (runId === activeRunId) {
+        setRunningState(false);
       }
     };
 

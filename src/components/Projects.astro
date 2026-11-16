@@ -1,67 +1,222 @@
 ---
 import { profileEntries, type ProfileMode } from "../config";
+import { profileBilingualEntries } from "../i18n/configs";
 import { getTechIconByKey, type TechIconKey } from "../utils/techIcons";
+import BiText from "./BiText.astro";
 import TechBadge from "./TechBadge.astro";
 import TerminalDemo from "./TerminalDemo.astro";
 
 interface FlowStage {
-  label: string;
-  detail: string;
+  labelPt: string;
+  labelEn: string;
+  detailPt: string;
+  detailEn: string;
 }
 
 interface StackCardDef {
   iconKey: TechIconKey;
   name: string;
-  role: string;
+  rolePt: string;
+  roleEn: string;
 }
 
 const PROJECT_STACK_CARDS: Record<string, Record<ProfileMode, StackCardDef[]>> = {
   "comex-data-engine-v2": {
     clt: [
-      { iconKey: "python", name: "Python 3.12", role: "Decimal anti-float & backoff Tenacity" },
-      { iconKey: "fastapi", name: "FastAPI", role: "API REST & fila de quarentena HITL" },
-      { iconKey: "postgresql", name: "PostgreSQL 16", role: "Partidas dobradas & triggers PL/pgSQL" },
-      { iconKey: "mongodb", name: "MongoDB 7", role: "Ingestão raw camt.053 & documentos" },
-      { iconKey: "duckdb", name: "DuckDB", role: "Queries analíticas sobre Parquet Hive" },
-      { iconKey: "docker", name: "Docker", role: "Stack tri-store isolado em Compose" },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Decimal anti-float & backoff Tenacity",
+        roleEn: "Anti-float Decimal & Tenacity backoff",
+      },
+      {
+        iconKey: "fastapi",
+        name: "FastAPI",
+        rolePt: "API REST & fila de quarentena HITL",
+        roleEn: "REST API & HITL quarantine queue",
+      },
+      {
+        iconKey: "postgresql",
+        name: "PostgreSQL 16",
+        rolePt: "Partidas dobradas & triggers PL/pgSQL",
+        roleEn: "Double-entry ledger & PL/pgSQL guards",
+      },
+      {
+        iconKey: "mongodb",
+        name: "MongoDB 7",
+        rolePt: "Ingestão raw camt.053 & documentos",
+        roleEn: "Raw camt.053 & invoice ingestion",
+      },
+      {
+        iconKey: "duckdb",
+        name: "DuckDB",
+        rolePt: "Queries analíticas sobre Parquet Hive",
+        roleEn: "Analytical queries over Hive Parquet",
+      },
+      {
+        iconKey: "docker",
+        name: "Docker",
+        rolePt: "Stack tri-store isolado em Compose",
+        roleEn: "Isolated tri-store Docker Compose",
+      },
     ],
     freela: [
-      { iconKey: "python", name: "Python 3.12", role: "Coleta automática BACEN PTAX & cálculos" },
-      { iconKey: "fastapi", name: "FastAPI", role: "Painel ágil para revisão de exceções" },
-      { iconKey: "postgresql", name: "PostgreSQL 16", role: "Livro-razão auditável centavo a centavo" },
-      { iconKey: "mongodb", name: "MongoDB 7", role: "Histórico bruto rastreável de faturas" },
-      { iconKey: "duckdb", name: "DuckDB", role: "Relatórios de Landed Cost instantâneos" },
-      { iconKey: "docker", name: "Docker", role: "Deploy enxuto em servidor único" },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Coleta automática BACEN PTAX & cálculos",
+        roleEn: "Automated Central Bank FX & cost logic",
+      },
+      {
+        iconKey: "fastapi",
+        name: "FastAPI",
+        rolePt: "Painel ágil para revisão de exceções",
+        roleEn: "Fast UI/API for invoice exception review",
+      },
+      {
+        iconKey: "postgresql",
+        name: "PostgreSQL 16",
+        rolePt: "Livro-razão auditável centavo a centavo",
+        roleEn: "Cent-accurate auditable ledger",
+      },
+      {
+        iconKey: "mongodb",
+        name: "MongoDB 7",
+        rolePt: "Histórico bruto rastreável de faturas",
+        roleEn: "Traceable raw invoice history",
+      },
+      {
+        iconKey: "duckdb",
+        name: "DuckDB",
+        rolePt: "Relatórios de Landed Cost instantâneos",
+        roleEn: "Instant Landed Cost reporting",
+      },
+      {
+        iconKey: "docker",
+        name: "Docker",
+        rolePt: "Deploy enxuto em servidor único",
+        roleEn: "Lean single-host deployment",
+      },
     ],
   },
   "MacroFlow-Lakehouse": {
     clt: [
-      { iconKey: "airflow", name: "Apache Airflow", role: "DAGs diárias & controle de watermark" },
-      { iconKey: "pyspark", name: "PySpark", role: "Transformação distribuída StructType" },
-      { iconKey: "databricks", name: "Databricks", role: "Camadas Medallion & Delta MERGE" },
-      { iconKey: "snowflake", name: "Snowflake", role: "Star Schema Kimball com RBAC" },
-      { iconKey: "python", name: "Python 3.12", role: "Contratos Pydantic V2 & CQR LightGBM" },
+      {
+        iconKey: "airflow",
+        name: "Apache Airflow",
+        rolePt: "DAGs diárias & controle de watermark",
+        roleEn: "Daily DAGs & watermark control",
+      },
+      {
+        iconKey: "pyspark",
+        name: "PySpark",
+        rolePt: "Transformação distribuída StructType",
+        roleEn: "Distributed StructType transforms",
+      },
+      {
+        iconKey: "databricks",
+        name: "Databricks",
+        rolePt: "Camadas Medallion & Delta MERGE",
+        roleEn: "Medallion layers & Delta MERGE",
+      },
+      {
+        iconKey: "snowflake",
+        name: "Snowflake",
+        rolePt: "Star Schema Kimball com RBAC",
+        roleEn: "Kimball Star Schema with RBAC",
+      },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Contratos Pydantic V2 & CQR LightGBM",
+        roleEn: "Pydantic V2 contracts & CQR LightGBM",
+      },
     ],
     freela: [
-      { iconKey: "airflow", name: "Apache Airflow", role: "Atualização diária antes do expediente" },
-      { iconKey: "pyspark", name: "PySpark", role: "Limpeza rápida de séries financeiras" },
-      { iconKey: "databricks", name: "Databricks", role: "Base unificada sem registros duplicados" },
-      { iconKey: "snowflake", name: "Snowflake", role: "Tabelas otimizadas para Power BI" },
-      { iconKey: "python", name: "Python 3.12", role: "Projeções cambiais com 95% confiança" },
+      {
+        iconKey: "airflow",
+        name: "Apache Airflow",
+        rolePt: "Atualização diária antes do expediente",
+        roleEn: "Daily sync before business hours",
+      },
+      {
+        iconKey: "pyspark",
+        name: "PySpark",
+        rolePt: "Limpeza rápida de séries financeiras",
+        roleEn: "Fast financial time-series cleaning",
+      },
+      {
+        iconKey: "databricks",
+        name: "Databricks",
+        rolePt: "Base unificada sem registros duplicados",
+        roleEn: "Unified zero-duplicate dataset",
+      },
+      {
+        iconKey: "snowflake",
+        name: "Snowflake",
+        rolePt: "Tabelas otimizadas para Power BI",
+        roleEn: "Power BI-ready analytics tables",
+      },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Projeções cambiais com 95% confiança",
+        roleEn: "FX forecasts with 95% confidence bands",
+      },
     ],
   },
   "B2B-Price-Market-Monitor": {
     clt: [
-      { iconKey: "python", name: "Python 3.12", role: "Edge CDC, Dual-Hash & Outbox retry" },
-      { iconKey: "sqlite", name: "SQLite 3 WAL", role: "B-Tree ~0,05 ms concorrente local" },
-      { iconKey: "docker", name: "Docker", role: "Container leve (~35 MB RAM)" },
-      { iconKey: "linux", name: "Linux", role: "Daemon nativo contínuo 24/7" },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Edge CDC, Dual-Hash & Outbox retry",
+        roleEn: "Edge CDC, Dual-Hash & Outbox retry",
+      },
+      {
+        iconKey: "sqlite",
+        name: "SQLite 3 WAL",
+        rolePt: "B-Tree ~0,05 ms concorrente local",
+        roleEn: "Concurrent local B-Tree (~0.05 ms)",
+      },
+      {
+        iconKey: "docker",
+        name: "Docker",
+        rolePt: "Container leve (~35 MB RAM)",
+        roleEn: "Lightweight container (~35 MB RAM)",
+      },
+      {
+        iconKey: "linux",
+        name: "Linux",
+        rolePt: "Daemon nativo contínuo 24/7",
+        roleEn: "24/7 native headless daemon",
+      },
     ],
     freela: [
-      { iconKey: "python", name: "Python 3.12", role: "Alertas limpos no Slack & Discord" },
-      { iconKey: "sqlite", name: "SQLite 3 WAL", role: "Zero custo de banco gerenciado" },
-      { iconKey: "docker", name: "Docker", role: "Instalação simples sem SaaS em dólar" },
-      { iconKey: "linux", name: "Linux", role: "Monitoramento estável 24/7 em VPS" },
+      {
+        iconKey: "python",
+        name: "Python 3.12",
+        rolePt: "Alertas limpos no Slack & Discord",
+        roleEn: "Clean Slack & Discord alerts",
+      },
+      {
+        iconKey: "sqlite",
+        name: "SQLite 3 WAL",
+        rolePt: "Zero custo de banco gerenciado",
+        roleEn: "Zero managed database billing",
+      },
+      {
+        iconKey: "docker",
+        name: "Docker",
+        rolePt: "Instalação simples sem SaaS em dólar",
+        roleEn: "Self-hosted without USD SaaS fees",
+      },
+      {
+        iconKey: "linux",
+        name: "Linux",
+        rolePt: "Monitoramento estável 24/7 em VPS",
+        roleEn: "Rock-solid 24/7 VPS monitoring",
+      },
     ],
   },
 };
@@ -69,60 +224,183 @@ const PROJECT_STACK_CARDS: Record<string, Record<ProfileMode, StackCardDef[]>> =
 const PROJECT_FLOWS: Record<string, Record<ProfileMode, FlowStage[]>> = {
   "comex-data-engine-v2": {
     clt: [
-      { label: "Fontes", detail: "BACEN PTAX · MDIC · SWIFT camt.053" },
-      { label: "Validação / Contrato", detail: "ODCS v3.2.0 · Pydantic V2 Anti-Float" },
-      { label: "Engine / Storage", detail: "MongoDB 7 · PG16 ACID · HITL" },
-      { label: "Saída", detail: "Parquet Hive · DuckDB · FastAPI" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "BACEN PTAX · MDIC · SWIFT camt.053",
+        detailEn: "BACEN PTAX · MDIC · SWIFT camt.053",
+      },
+      {
+        labelPt: "Validação / Contrato",
+        labelEn: "Validation / Contract",
+        detailPt: "ODCS v3.2.0 · Pydantic V2 Anti-Float",
+        detailEn: "ODCS v3.2.0 · Pydantic V2 Anti-Float",
+      },
+      {
+        labelPt: "Engine / Storage",
+        labelEn: "Engine / Storage",
+        detailPt: "MongoDB 7 · PG16 ACID · HITL",
+        detailEn: "MongoDB 7 · PG16 ACID · HITL",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Parquet Hive · DuckDB · FastAPI",
+        detailEn: "Hive Parquet · DuckDB · FastAPI",
+      },
     ],
     freela: [
-      { label: "Fontes", detail: "Faturas · Câmbio BACEN · Bancos" },
-      { label: "Guardião Anti-Erro", detail: "Trava Matemática & Quarentena" },
-      { label: "Livro Caixa", detail: "Cascata Fiscal + Partidas Dobradas" },
-      { label: "Saída", detail: "Landed Cost & Margem Auditada" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "Faturas · Câmbio BACEN · Bancos",
+        detailEn: "Invoices · Central Bank FX · Banks",
+      },
+      {
+        labelPt: "Guardião Anti-Erro",
+        labelEn: "Error Safeguard",
+        detailPt: "Trava Matemática & Quarentena",
+        detailEn: "Math Verification & Quarantine",
+      },
+      {
+        labelPt: "Livro Caixa",
+        labelEn: "Immutable Ledger",
+        detailPt: "Cascata Fiscal + Partidas Dobradas",
+        detailEn: "Tax Cascade + Double-Entry",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Landed Cost & Margem Auditada",
+        detailEn: "Landed Cost & Audited Margin",
+      },
     ],
   },
   "MacroFlow-Lakehouse": {
     clt: [
-      { label: "Fontes", detail: "BACEN SGS (Selic/IPCA) · YFinance" },
-      { label: "Validação / Contrato", detail: "Airflow Edge · Pydantic V2 · StructType" },
-      { label: "Engine / Storage", detail: "Databricks Medallion · Delta MERGE" },
-      { label: "Saída", detail: "Snowflake Kimball · LightGBM CQR" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "BACEN SGS (Selic/IPCA) · YFinance",
+        detailEn: "Central Bank SGS · YFinance",
+      },
+      {
+        labelPt: "Validação / Contrato",
+        labelEn: "Validation / Contract",
+        detailPt: "Airflow Edge · Pydantic V2 · StructType",
+        detailEn: "Airflow Edge · Pydantic V2 · StructType",
+      },
+      {
+        labelPt: "Engine / Storage",
+        labelEn: "Engine / Storage",
+        detailPt: "Databricks Medallion · Delta MERGE",
+        detailEn: "Databricks Medallion · Delta MERGE",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Snowflake Kimball · LightGBM CQR",
+        detailEn: "Snowflake Kimball · LightGBM CQR",
+      },
     ],
     freela: [
-      { label: "Fontes", detail: "Indicadores Oficiais & Cotações" },
-      { label: "Guardião", detail: "Checagem Automática na Entrada" },
-      { label: "Base Única", detail: "Atualização Diária Sem Duplicatas" },
-      { label: "Saída", detail: "Power BI Diário & Previsão Cambial" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "Indicadores Oficiais & Cotações",
+        detailEn: "Official Macro Feeds & FX Quotes",
+      },
+      {
+        labelPt: "Guardião",
+        labelEn: "Safeguard",
+        detailPt: "Checagem Automática na Entrada",
+        detailEn: "Automated Input Validation",
+      },
+      {
+        labelPt: "Base Única",
+        labelEn: "Single Source",
+        detailPt: "Atualização Diária Sem Duplicatas",
+        detailEn: "Daily Sync Without Duplicates",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Power BI Diário & Previsão Cambial",
+        detailEn: "Daily Power BI & FX Forecasting",
+      },
     ],
   },
   "B2B-Price-Market-Monitor": {
     clt: [
-      { label: "Fontes", detail: "Edge Collectors · HTTP / JSON" },
-      { label: "Validação / Contrato", detail: "ODCS v3.2.0 · DECIMAL · Circuit Breaker" },
-      { label: "Engine / Storage", detail: "Dual-Hash SHA-256 · SQLite WAL" },
-      { label: "Saída", detail: "Transactional Outbox · Discord / Slack" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "Edge Collectors · HTTP / JSON",
+        detailEn: "Edge Collectors · HTTP / JSON",
+      },
+      {
+        labelPt: "Validação / Contrato",
+        labelEn: "Validation / Contract",
+        detailPt: "ODCS v3.2.0 · DECIMAL · Circuit Breaker",
+        detailEn: "ODCS v3.2.0 · DECIMAL · Circuit Breaker",
+      },
+      {
+        labelPt: "Engine / Storage",
+        labelEn: "Engine / Storage",
+        detailPt: "Dual-Hash SHA-256 · SQLite WAL",
+        detailEn: "Dual-Hash SHA-256 · SQLite WAL",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Transactional Outbox · Discord / Slack",
+        detailEn: "Transactional Outbox · Discord / Slack",
+      },
     ],
     freela: [
-      { label: "Fontes", detail: "Concorrentes, Estoques & Portais" },
-      { label: "Guardião", detail: "Filtro Anti-Ruído & Trava de Layout" },
-      { label: "Detector 24/7", detail: "Monitoramento (~35 MB RAM)" },
-      { label: "Saída", detail: "Alertas Limpos no Slack / Discord" },
+      {
+        labelPt: "Fontes",
+        labelEn: "Sources",
+        detailPt: "Concorrentes, Estoques & Portais",
+        detailEn: "Competitors, Stock & Portals",
+      },
+      {
+        labelPt: "Guardião",
+        labelEn: "Safeguard",
+        detailPt: "Filtro Anti-Ruído & Trava de Layout",
+        detailEn: "Anti-Noise Filter & Layout Guard",
+      },
+      {
+        labelPt: "Detector 24/7",
+        labelEn: "24/7 Detector",
+        detailPt: "Monitoramento (~35 MB RAM)",
+        detailEn: "Monitoring (~35 MB RAM)",
+      },
+      {
+        labelPt: "Saída",
+        labelEn: "Output",
+        detailPt: "Alertas Limpos no Slack / Discord",
+        detailEn: "Clean Slack / Discord Alerts",
+      },
     ],
   },
 };
 
-const PROJECT_INDEX_LABELS: Record<string, Record<ProfileMode, string>> = {
+const PROJECT_INDEX_LABELS: Record<
+  string,
+  Record<ProfileMode, { pt: string; en: string }>
+> = {
   "comex-data-engine-v2": {
-    clt: "comex-data-engine-v2",
-    freela: "Comex Data Engine V2",
+    clt: { pt: "comex-data-engine-v2", en: "comex-data-engine-v2" },
+    freela: { pt: "Comex Data Engine V2", en: "Comex Data Engine V2" },
   },
   "MacroFlow-Lakehouse": {
-    clt: "MacroFlow-Lakehouse",
-    freela: "MacroFlow BI & Câmbio",
+    clt: { pt: "MacroFlow-Lakehouse", en: "MacroFlow-Lakehouse" },
+    freela: { pt: "MacroFlow BI & Câmbio", en: "MacroFlow BI & FX" },
   },
   "B2B-Price-Market-Monitor": {
-    clt: "B2B-Price-Market-Monitor",
-    freela: "B2B Price Monitor",
+    clt: { pt: "B2B-Price-Market-Monitor", en: "B2B-Price-Market-Monitor" },
+    freela: { pt: "B2B Price Monitor", en: "B2B Price Monitor" },
   },
 };
 
@@ -146,8 +424,10 @@ const hasProjects = profileEntries.some(
           <div class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start space-y-6">
             <div>
               <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-slate-100">
-                <span class="mode-clt">Projetos</span>
-                <span class="mode-freela">Cases &amp; Soluções</span>
+                <span class="mode-clt"><BiText pt="Projetos" en="Projects" /></span>
+                <span class="mode-freela">
+                  <BiText pt="Cases & Soluções" en="Case Studies & Solutions" />
+                </span>
               </h2>
               <div
                 class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
@@ -158,31 +438,42 @@ const hasProjects = profileEntries.some(
             {/* Mini-índice clicável sincronizado com scroll */}
             {profileEntries.map(({ mode, modeClass, config }) => (
               <nav
+                data-projects-nav
                 aria-label="Índice dos projetos"
                 class={`${modeClass} hidden lg:block space-y-1.5`}
               >
-                {config.projects.map((project, index) => (
-                  <a
-                    href={`#project-${mode}-${index}`}
-                    data-project-nav={`${mode}-${index}`}
-                    data-active={index === 0 ? "true" : "false"}
-                    class="project-nav-item flex items-center gap-2.5 px-3 py-2 rounded-lg border border-transparent text-xs font-mono text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-100 hover:bg-gray-100/70 dark:hover:bg-slate-800/50 transition-all duration-200"
-                  >
-                    <span class="project-nav-num font-bold shrink-0">
-                      0{index + 1}
-                    </span>
-                    <span class="truncate">
-                      {PROJECT_INDEX_LABELS[project.repo]?.[mode] ?? project.repo}
-                    </span>
-                  </a>
-                ))}
+                {config.projects.map((project, index) => {
+                  const navLabel = PROJECT_INDEX_LABELS[project.repo]?.[mode];
+                  return (
+                    <a
+                      href={`#project-${mode}-${index}`}
+                      data-project-nav={`${mode}-${index}`}
+                      data-active={index === 0 ? "true" : "false"}
+                      class="project-nav-item flex items-center gap-2.5 px-3 py-2 rounded-lg border border-transparent text-xs font-mono text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-100 hover:bg-gray-100/70 dark:hover:bg-slate-800/50 transition-all duration-200"
+                    >
+                      <span class="project-nav-num font-bold shrink-0">
+                        0{index + 1}
+                      </span>
+                      <span class="truncate">
+                        {navLabel ? (
+                          <BiText pt={navLabel.pt} en={navLabel.en} />
+                        ) : (
+                          project.repo
+                        )}
+                      </span>
+                    </a>
+                  );
+                })}
               </nav>
             ))}
 
             {/* Card Garantias de Arquitetura */}
             <div class="rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-4 space-y-3">
               <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">
-                Garantias de Arquitetura
+                <BiText
+                  pt="Garantias de Arquitetura"
+                  en="Architecture Guarantees"
+                />
               </p>
               <ul class="grid grid-cols-2 gap-2">
                 {ARCHITECTURE_GUARANTEES.map((item) => (
@@ -199,9 +490,10 @@ const hasProjects = profileEntries.some(
           </div>
 
           <div class="lg:col-span-8">
-            {profileEntries.map(({ mode, modeClass, config }) => (
+            {profileBilingualEntries.map(({ mode, modeClass, pt, en }) => (
               <div class={`${modeClass} space-y-8`}>
-                {config.projects.map((project, index) => {
+                {pt.projects.map((project, index) => {
+                  const projectEn = en.projects[index] ?? project;
                   const drawerId = `arch-drawer-${mode}-${index}`;
                   const stages = PROJECT_FLOWS[project.repo]?.[mode] ?? [];
                   const stackCards = PROJECT_STACK_CARDS[project.repo]?.[mode] ?? [];
@@ -218,6 +510,8 @@ const hasProjects = profileEntries.some(
                           href={project.link}
                           target="_blank"
                           rel="noopener noreferrer"
+                          data-repo-link
+                          data-repo={project.repo}
                           aria-label={`Abrir repositório ${project.repo} no GitHub`}
                           class="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center bg-gray-900 dark:bg-slate-800 rounded-full text-white dark:text-slate-100 dark:border dark:border-slate-700 transition-all duration-300 hover:bg-gray-700 dark:hover:bg-[var(--accent-color)] dark:hover:border-[var(--accent-color)]"
                         >
@@ -254,10 +548,10 @@ const hasProjects = profileEntries.some(
                                 rel="noopener noreferrer"
                                 class="hover:underline underline-offset-4 decoration-2"
                               >
-                                {project.name}
+                                <BiText pt={project.name} en={projectEn.name} />
                               </a>
                             ) : (
-                              project.name
+                              <BiText pt={project.name} en={projectEn.name} />
                             )}
                           </h3>
                         </div>
@@ -265,29 +559,41 @@ const hasProjects = profileEntries.some(
                         <p
                           class={`text-base sm:text-lg text-gray-600 dark:text-slate-300 leading-relaxed ${project.link ? "pr-12 sm:pr-14 md:pr-16" : ""}`}
                         >
-                          {project.description}
+                          <BiText pt={project.description} en={projectEn.description} />
                         </p>
 
                         {project.highlights && project.highlights.length > 0 && (
                           <ul class="space-y-2 pt-1">
-                            {project.highlights.map((highlight) => (
+                            {project.highlights.map((highlight, hIdx) => (
                               <li class="flex items-start text-sm sm:text-base text-gray-600 dark:text-slate-300">
                                 <span
                                   class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0 transition-colors duration-300"
                                   style="background-color: var(--accent-color)"
                                 />
-                                <span>{highlight}</span>
+                                <span>
+                                  <BiText
+                                    pt={highlight}
+                                    en={projectEn.highlights[hIdx] ?? highlight}
+                                  />
+                                </span>
                               </li>
                             ))}
                           </ul>
                         )}
 
                         {project.skills && project.skills.length > 0 && (
-                          <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
-                            {project.skills.map((skill) => (
-                              <TechBadge label={skill} variant="dark" />
-                            ))}
-                          </div>
+                          <>
+                            <div class="lang-pt flex flex-wrap gap-1.5 sm:gap-2 pt-2">
+                              {project.skills.map((skill) => (
+                                <TechBadge label={skill} variant="dark" />
+                              ))}
+                            </div>
+                            <div class="lang-en flex flex-wrap gap-1.5 sm:gap-2 pt-2">
+                              {projectEn.skills.map((skill) => (
+                                <TechBadge label={skill} variant="dark" />
+                              ))}
+                            </div>
+                          </>
                         )}
 
                         {stages.length > 0 && (
@@ -319,7 +625,12 @@ const hasProjects = profileEntries.some(
                                 <path d="M7 9h10" />
                                 <path d="M12 9v4" />
                               </svg>
-                              <span>Ver Fluxo de Arquitetura &amp; Stack</span>
+                              <span>
+                                <BiText
+                                  pt="Ver Fluxo de Arquitetura & Stack"
+                                  en="View Architecture Flow & Stack"
+                                />
+                              </span>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -349,10 +660,10 @@ const hasProjects = profileEntries.some(
                                             class="text-[11px] font-mono font-semibold uppercase tracking-wide"
                                             style="color: var(--accent-color)"
                                           >
-                                            0{stageIdx + 1} · {stage.label}
+                                            0{stageIdx + 1} · <BiText pt={stage.labelPt} en={stage.labelEn} />
                                           </span>
                                           <span class="mt-1 text-xs font-medium text-gray-800 dark:text-slate-200 leading-snug">
-                                            {stage.detail}
+                                            <BiText pt={stage.detailPt} en={stage.detailEn} />
                                           </span>
                                         </div>
 
@@ -418,7 +729,10 @@ const hasProjects = profileEntries.some(
                                   {stackCards.length > 0 && (
                                     <div class="mt-4 pt-4 border-t border-gray-200/70 dark:border-slate-800/80">
                                       <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-3">
-                                        Tecnologias do Pipeline
+                                        <BiText
+                                          pt="Tecnologias do Pipeline"
+                                          en="Pipeline Stack"
+                                        />
                                       </p>
                                       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                                         {stackCards.map((tech, techIdx) => {
@@ -450,7 +764,7 @@ const hasProjects = profileEntries.some(
                                                   {tech.name}
                                                 </p>
                                                 <p class="text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
-                                                  {tech.role}
+                                                  <BiText pt={tech.rolePt} en={tech.roleEn} />
                                                 </p>
                                               </div>
                                             </div>
@@ -483,6 +797,28 @@ const hasProjects = profileEntries.some(
   const projectCards = Array.from(
     document.querySelectorAll<HTMLElement>("[data-project-card]")
   );
+
+  const syncProjectsAria = () => {
+    const isEn = document.documentElement.dataset.lang === "en";
+    document.querySelectorAll<HTMLElement>("[data-projects-nav]").forEach((nav) => {
+      nav.setAttribute(
+        "aria-label",
+        isEn ? "Projects index" : "Índice dos projetos"
+      );
+    });
+    document.querySelectorAll<HTMLElement>("[data-repo-link]").forEach((link) => {
+      const repo = link.getAttribute("data-repo") ?? "";
+      link.setAttribute(
+        "aria-label",
+        isEn
+          ? `Open ${repo} repository on GitHub`
+          : `Abrir repositório ${repo} no GitHub`
+      );
+    });
+  };
+
+  syncProjectsAria();
+  window.addEventListener("portfolio:langchange", syncProjectsAria);
 
   const setCardOpen = (card: HTMLElement, open: boolean) => {
     const next = String(open);

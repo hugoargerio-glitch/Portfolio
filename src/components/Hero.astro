@@ -1,6 +1,8 @@
 ---
 import { cltConfig, freelaConfig, siteConfig } from "../config";
+import { cltConfigEn, freelaConfigEn } from "../i18n/configs";
 import { getTechIconByKey } from "../utils/techIcons";
+import BiText from "./BiText.astro";
 
 const GEAR_PRIMARY_PATH =
   "M19.07,5.85 L20.43,1.98 L22.81,2.53 L22.35,6.60 L24.28,7.54 L26.01,8.80 L29.38,6.47 L30.99,8.31 L28.22,11.33 L29.23,13.23 L29.89,15.26 L33.98,15.37 L34.20,17.80 L30.18,18.61 L29.89,20.74 L29.23,22.77 L32.48,25.26 L31.22,27.36 L27.50,25.66 L26.01,27.20 L24.28,28.46 L25.45,32.39 L23.20,33.34 L21.18,29.78 L19.07,30.15 L16.93,30.15 L15.57,34.02 L13.19,33.47 L13.65,29.40 L11.72,28.46 L9.99,27.20 L6.62,29.53 L5.01,27.69 L7.78,24.67 L6.77,22.77 L6.11,20.74 L2.02,20.63 L1.80,18.20 L5.82,17.39 L6.11,15.26 L6.77,13.23 L3.52,10.74 L4.78,8.64 L8.50,10.34 L9.99,8.80 L11.72,7.54 L10.55,3.61 L12.80,2.66 L14.82,6.22 L16.93,5.85 Z M 23.2,18 A 5.2,5.2 0 1,0 12.8,18 A 5.2,5.2 0 1,0 23.2,18 Z";
@@ -12,34 +14,50 @@ const heroPipelineStages = [
   {
     step: "01",
     iconKey: "python" as const,
-    cltTag: "FONTES",
-    cltTitle: "BACEN PTAX · MDIC · Market Feeds",
-    freelaTag: "ENTRADA",
-    freelaTitle: "ERPs, Planilhas & Cotações",
+    cltTagPt: "FONTES",
+    cltTagEn: "SOURCES",
+    cltTitlePt: "BACEN PTAX · MDIC · Market Feeds",
+    cltTitleEn: "BACEN PTAX · Trade APIs · Market Feeds",
+    freelaTagPt: "ENTRADA",
+    freelaTagEn: "INPUT",
+    freelaTitlePt: "ERPs, Planilhas & Cotações",
+    freelaTitleEn: "ERPs, Spreadsheets & FX Rates",
   },
   {
     step: "02",
     iconKey: "databricks" as const,
-    cltTag: "SHIFT-LEFT",
-    cltTitle: "Contratos ODCS v3.2.0 + Pydantic V2",
-    freelaTag: "BLINDAGEM",
-    freelaTitle: "Filtro Anti-Erro & Zero Duplicatas",
+    cltTagPt: "SHIFT-LEFT",
+    cltTagEn: "SHIFT-LEFT",
+    cltTitlePt: "Contratos ODCS v3.2.0 + Pydantic V2",
+    cltTitleEn: "ODCS v3.2.0 Contracts + Pydantic V2",
+    freelaTagPt: "BLINDAGEM",
+    freelaTagEn: "SAFEGUARD",
+    freelaTitlePt: "Filtro Anti-Erro & Zero Duplicatas",
+    freelaTitleEn: "Error Shield & Zero Duplicates",
   },
   {
     step: "03",
     iconKey: "postgresql" as const,
-    cltTag: "STORAGE ACID",
-    cltTitle: "PostgreSQL 16 · Delta Lake · SQLite WAL",
-    freelaTag: "BANCO ÚNICO",
-    freelaTitle: "Base Relacional em Docker Compose",
+    cltTagPt: "STORAGE ACID",
+    cltTagEn: "ACID STORAGE",
+    cltTitlePt: "PostgreSQL 16 · Delta Lake · SQLite WAL",
+    cltTitleEn: "PostgreSQL 16 · Delta Lake · SQLite WAL",
+    freelaTagPt: "BANCO ÚNICO",
+    freelaTagEn: "SINGLE DB",
+    freelaTitlePt: "Base Relacional em Docker Compose",
+    freelaTitleEn: "Relational Store in Docker Compose",
   },
   {
     step: "04",
     iconKey: "snowflake" as const,
-    cltTag: "SERVING & OBS",
-    cltTitle: "Snowflake Kimball · DuckDB · Outbox",
-    freelaTag: "RESULTADO",
-    freelaTitle: "Power BI Diário & Alertas 24/7",
+    cltTagPt: "SERVING & OBS",
+    cltTagEn: "SERVING & OBS",
+    cltTitlePt: "Snowflake Kimball · DuckDB · Outbox",
+    cltTitleEn: "Snowflake Kimball · DuckDB · Outbox",
+    freelaTagPt: "RESULTADO",
+    freelaTagEn: "OUTPUT",
+    freelaTitlePt: "Power BI Diário & Alertas 24/7",
+    freelaTitleEn: "Daily Power BI & 24/7 Alerts",
   },
 ] as const;
 ---
@@ -65,22 +83,23 @@ const heroPipelineStages = [
       <!-- Coluna esquerda: Identidade, Engrenagens e CTA (7 colunas) -->
       <div class="lg:col-span-7">
         <p class="text-pretty text-xl sm:text-2xl md:text-4xl font-bold tracking-tight text-gray-700 dark:text-slate-300 animate-fade-in">
-          Olá! 👋
+          <BiText pt="Olá! 👋" en="Hi there! 👋" />
         </p>
         <h1 class="mt-4 sm:mt-6 md:mt-8 text-pretty text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-gray-800 dark:text-slate-100 animate-fade-in animation-delay-200">
-          Eu sou <span class="transition-colors duration-300" style="color: var(--accent-color)">{siteConfig.name}</span>
+          <BiText pt="Eu sou " en="I'm " /><span class="transition-colors duration-300" style="color: var(--accent-color)">{siteConfig.name}</span>
         </h1>
 
         <p class="mode-clt mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 dark:text-slate-300 animate-fade-in animation-delay-400">
-          {cltConfig.title}
+          <BiText pt={cltConfig.title} en={cltConfigEn.title} />
         </p>
         <p class="mode-freela mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 dark:text-slate-300 animate-fade-in animation-delay-400">
-          {freelaConfig.title}
+          <BiText pt={freelaConfig.title} en={freelaConfigEn.title} />
         </p>
 
         <!-- Seletor interativo de engrenagens mecânicas acopladas -->
         <div
           role="group"
+          data-mode-dock
           aria-label="Selecionar modo de visualização do portfólio"
           class="mode-dock mt-6 sm:mt-8 rounded-2xl border border-gray-200 dark:border-slate-800 p-1.5 sm:p-2 bg-white/90 dark:bg-[#111827]/90 backdrop-blur-sm transition-all duration-300 flex flex-col sm:inline-flex sm:flex-row sm:items-stretch gap-2 w-full sm:w-auto animate-fade-in animation-delay-400"
         >
@@ -123,10 +142,16 @@ const heroPipelineStages = [
               class="mode-btn mode-btn-clt group flex flex-col justify-center px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-transparent text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--clt-accent)]"
             >
               <span class="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-slate-100 leading-snug">
-                Modo Recrutador (CLT / Tech)
+                <BiText
+                  pt="Modo Recrutador (CLT / Tech)"
+                  en="Recruiter View (Full-Time / Tech)"
+                />
               </span>
               <span class="block text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
-                Arquitetura, Stack &amp; ODCS v3.2.0
+                <BiText
+                  pt="Arquitetura, Stack & ODCS v3.2.0"
+                  en="Architecture, Stack & ODCS v3.2.0"
+                />
               </span>
             </button>
 
@@ -137,10 +162,16 @@ const heroPipelineStages = [
               class="mode-btn mode-btn-freela group flex flex-col justify-center px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-transparent text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--freela-accent)]"
             >
               <span class="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-slate-100 leading-snug">
-                Modo Empresa (Freelancer B2B)
+                <BiText
+                  pt="Modo Empresa (Freelancer B2B)"
+                  en="Client View (B2B Consulting)"
+                />
               </span>
               <span class="block text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
-                ROI, Automação &amp; Pacotes B2B
+                <BiText
+                  pt="ROI, Automação & Pacotes B2B"
+                  en="ROI, Automation & B2B Packages"
+                />
               </span>
             </button>
           </div>
@@ -173,46 +204,86 @@ const heroPipelineStages = [
               <path d="M7 11l5 5l5 -5" />
               <path d="M12 4l0 12" />
             </svg>
-            {cltConfig.cta.label}
+            <BiText pt={cltConfig.cta.label} en={cltConfigEn.cta.label} />
           </a>
 
-          <a
-            href={freelaConfig.cta.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mode-freela inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-5 py-3 rounded-xl text-[13px] sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 text-center"
-            style="background-color: var(--freela-accent)"
-          >
-            <span>
-              {freelaConfig.cta.label}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="17"
-                height="17"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                class="inline-block ml-1.5 -mt-0.5 shrink-0"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M7 17l10 -10" />
-                <path d="M7 7h10v10" />
-              </svg>
-            </span>
-          </a>
+          <span class="mode-freela inline-flex w-full sm:w-auto">
+            <a
+              href={freelaConfig.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lang-pt inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-5 py-3 rounded-xl text-[13px] sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 text-center"
+              style="background-color: var(--freela-accent)"
+            >
+              <span>
+                {freelaConfig.cta.label}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  class="inline-block ml-1.5 -mt-0.5 shrink-0"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M7 17l10 -10" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </span>
+            </a>
+            <a
+              href={freelaConfigEn.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lang-en inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-5 py-3 rounded-xl text-[13px] sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 text-center"
+              style="background-color: var(--freela-accent)"
+            >
+              <span>
+                {freelaConfigEn.cta.label}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  class="inline-block ml-1.5 -mt-0.5 shrink-0"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M7 17l10 -10" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </span>
+            </a>
+          </span>
 
           {
             freelaConfig.cta.secondaryHref && freelaConfig.cta.secondaryLabel && (
-              <a
-                href={freelaConfig.cta.secondaryHref}
-                class="mode-freela inline-flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-sm sm:text-base font-medium text-gray-700 dark:text-slate-200 transition-colors duration-300 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100"
-              >
-                {freelaConfig.cta.secondaryLabel}
-              </a>
+              <span class="mode-freela inline-flex w-full sm:w-auto">
+                <a
+                  href={freelaConfig.cta.secondaryHref}
+                  class="lang-pt inline-flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-sm sm:text-base font-medium text-gray-700 dark:text-slate-200 transition-colors duration-300 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100"
+                >
+                  {freelaConfig.cta.secondaryLabel}
+                </a>
+                {freelaConfigEn.cta.secondaryHref && freelaConfigEn.cta.secondaryLabel && (
+                  <a
+                    href={freelaConfigEn.cta.secondaryHref}
+                    class="lang-en inline-flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-sm sm:text-base font-medium text-gray-700 dark:text-slate-200 transition-colors duration-300 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100"
+                  >
+                    {freelaConfigEn.cta.secondaryLabel}
+                  </a>
+                )}
+              </span>
             )
           }
         </div>
@@ -220,7 +291,7 @@ const heroPipelineStages = [
         <!-- Barra de Telemetria / Prova Rápida -->
         <div class="mt-6 pt-5 border-t border-gray-200/80 dark:border-slate-800/80 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] sm:text-xs font-mono text-gray-600 dark:text-slate-400 animate-fade-in animation-delay-600">
           <span>
-            <strong class="text-gray-900 dark:text-slate-200 font-semibold">ODCS v3.2.0</strong> • Contratos Executáveis
+            <strong class="text-gray-900 dark:text-slate-200 font-semibold">ODCS v3.2.0</strong> • <BiText pt="Contratos Executáveis" en="Executable Data Contracts" />
           </span>
           <span aria-hidden="true" class="hidden sm:inline text-gray-300 dark:text-slate-700">|</span>
           <span>
@@ -228,13 +299,14 @@ const heroPipelineStages = [
           </span>
           <span aria-hidden="true" class="hidden sm:inline text-gray-300 dark:text-slate-700">|</span>
           <span>
-            <strong class="text-gray-900 dark:text-slate-200 font-semibold">Comex &amp; Dados</strong> • PUCRS + IBM Certified
+            <strong class="text-gray-900 dark:text-slate-200 font-semibold"><BiText pt="Comex & Dados" en="Trade & Data" /></strong> • PUCRS + IBM Certified
           </span>
         </div>
       </div>
 
       <!-- Coluna direita: Diagrama minimalista animado de pipeline (5 colunas, desktop) -->
       <aside
+        data-pipeline-aside
         aria-label="Arquitetura de pipeline de dados"
         class="hidden lg:flex lg:col-span-5 items-center justify-center animate-fade-in animation-delay-400"
       >
@@ -244,7 +316,7 @@ const heroPipelineStages = [
               pipeline_topology · ODCS v3.2.0
             </span>
             <span class="mode-freela text-xs font-mono font-semibold text-gray-600 dark:text-slate-400">
-              automacao_b2b · SLA Ativo
+              <BiText pt="automacao_b2b · SLA Ativo" en="b2b_automation · Active SLA" />
             </span>
             <span
               class="inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold"
@@ -271,8 +343,8 @@ const heroPipelineStages = [
                           class="text-[11px] font-mono font-semibold"
                           style="color: var(--accent-color)"
                         >
-                          <span class="mode-clt">{stage.step} · {stage.cltTag}</span>
-                          <span class="mode-freela">{stage.step} · {stage.freelaTag}</span>
+                          <span class="mode-clt">{stage.step} · <BiText pt={stage.cltTagPt} en={stage.cltTagEn} /></span>
+                          <span class="mode-freela">{stage.step} · <BiText pt={stage.freelaTagPt} en={stage.freelaTagEn} /></span>
                         </span>
                         <span class="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-slate-700" />
                       </div>
@@ -286,10 +358,10 @@ const heroPipelineStages = [
                           class="w-3.5 h-3.5 shrink-0 object-contain"
                         />
                         <p class="mode-clt text-xs font-semibold text-gray-800 dark:text-slate-100 leading-snug">
-                          {stage.cltTitle}
+                          <BiText pt={stage.cltTitlePt} en={stage.cltTitleEn} />
                         </p>
                         <p class="mode-freela text-xs font-semibold text-gray-800 dark:text-slate-100 leading-snug">
-                          {stage.freelaTitle}
+                          <BiText pt={stage.freelaTitlePt} en={stage.freelaTitleEn} />
                         </p>
                       </div>
                     </div>
@@ -495,19 +567,45 @@ const heroPipelineStages = [
 <script is:inline>
   (() => {
     const buttons = document.querySelectorAll("[data-mode-btn]");
+    const modeDock = document.querySelector("[data-mode-dock]");
+    const pipelineAside = document.querySelector("[data-pipeline-aside]");
+
     const syncPressed = (mode) => {
       buttons.forEach((btn) =>
         btn.setAttribute("aria-pressed", String(btn.getAttribute("data-mode-btn") === mode))
       );
     };
 
+    const syncHeroAria = () => {
+      const isEn = document.documentElement.dataset.lang === "en";
+      if (modeDock) {
+        modeDock.setAttribute(
+          "aria-label",
+          isEn
+            ? "Select portfolio view mode"
+            : "Selecionar modo de visualização do portfólio"
+        );
+      }
+      if (pipelineAside) {
+        pipelineAside.setAttribute(
+          "aria-label",
+          isEn ? "Data pipeline architecture" : "Arquitetura de pipeline de dados"
+        );
+      }
+    };
+
     syncPressed(document.documentElement.dataset.mode === "freela" ? "freela" : "clt");
+    syncHeroAria();
+    window.addEventListener("portfolio:langchange", syncHeroAria);
 
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const mode = btn.getAttribute("data-mode-btn") === "freela" ? "freela" : "clt";
         document.documentElement.dataset.mode = mode;
         syncPressed(mode);
+        if (typeof window.__syncPortfolioMeta === "function") {
+          window.__syncPortfolioMeta();
+        }
         const url = new URL(window.location.href);
         url.searchParams.set("modo", mode);
         window.history.replaceState({}, "", url);
