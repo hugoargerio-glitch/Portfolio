@@ -1,0 +1,241 @@
+---
+interface Props {
+  repo: string;
+}
+
+interface CliLine {
+  text: string;
+  tone?: "ok" | "metric" | "warn" | "plain";
+}
+
+interface CliDemoConfig {
+  command: string;
+  lines: CliLine[];
+}
+
+const CLI_DEMOS: Record<string, CliDemoConfig> = {
+  "comex-data-engine-v2": {
+    command: "make fetch-ptax && make verify",
+    lines: [
+      {
+        text: "[INFO] src.extractors.bacen_ptax_client :: Olinda CotacaoMoedaPeriodo (USD, EUR, CHF)",
+        tone: "metric",
+      },
+      {
+        text: "[OK] 18 cotacoes PTAX + LOCF forward-fill -> dim_currency_ptax (Decimal 19,6)",
+        tone: "ok",
+      },
+      {
+        text: "[PASS] ODCS v3.2.0 lint (contracts/comex_fiduciary_engine_v2.odcs.yaml)",
+        tone: "ok",
+      },
+      {
+        text: "[OK] Double-entry zero-sum check: SUM(debit) - SUM(credit) = 0.0000",
+        tone: "metric",
+      },
+      {
+        text: "[GUARD] trg_journal_lines_immutable -> UPDATE/DELETE bloqueado (prevent_journal_mutation)",
+        tone: "warn",
+      },
+      {
+        text: "[WARN] comex_quarantine_hitl: 1 fatura isolada (PENDING_REVIEW) para auditoria HITL",
+        tone: "warn",
+      },
+      {
+        text: "[PASS] 34 assertions passed in 2.14s (PG16 + MongoDB 7 + DuckDB HTAP)",
+        tone: "ok",
+      },
+    ],
+  },
+  "MacroFlow-Lakehouse": {
+    command: "airflow dags trigger macroflow_medallion_elt",
+    lines: [
+      {
+        text: "[OK] Pydantic v2 Shift-Left (BCBRecord, MarketRecord :: allow_inf_nan=False) PASS",
+        tone: "ok",
+      },
+      {
+        text: "[INFO] Hive partition -> /Volumes/macroflow/bronze/raw_data/year=2026/month=11/day=16",
+        tone: "metric",
+      },
+      {
+        text: "[OK] Silver Delta MERGE INTO macroflow_silver.market_conformed (Decimal 18,8)",
+        tone: "ok",
+      },
+      {
+        text: "[OK] Gold Fisher Real Rate (IPCA 40d lag guard, vol sqrt(252)/sqrt(365))",
+        tone: "ok",
+      },
+      {
+        text: "[INFO] LightGBM CQR 95% (@champion): D+1 USD/BRL = 5.2410 [5.1820 .. 5.3015]",
+        tone: "metric",
+      },
+      {
+        text: "[OK] Snowflake Kimball sync (FACT_MARKET_DAILY + FACT_MACRO_FORECASTS) :: MACROFLOW_ETL_ROLE",
+        tone: "ok",
+      },
+    ],
+  },
+  "B2B-Price-Market-Monitor": {
+    command: "make run",
+    lines: [
+      {
+        text: "[1/3 simulate] Dual-Hash SHA-256 diff :: 0 falsos positivos em heartbeats",
+        tone: "metric",
+      },
+      {
+        text: "[OK] SQLite WAL (BEGIN IMMEDIATE) persistido em 11.4ms (B-Tree lookup 0.048ms)",
+        tone: "ok",
+      },
+      {
+        text: "[WARN] Circuit Breaker check: N=12, falhas=8.3% (<= 20%) | 1 item -> quarantine DLQ",
+        tone: "warn",
+      },
+      {
+        text: "[2/3 dispatch] Transactional Outbox (PRICE_CHANGED) -> Webhook HTTP 204 No Content",
+        tone: "ok",
+      },
+      {
+        text: "[3/3 status] make status (<10ms) :: 142 SKUs ativos | Outbox PENDING: 0 | PASS",
+        tone: "metric",
+      },
+    ],
+  },
+};
+
+const TONE_CLASS: Record<NonNullable<CliLine["tone"]>, string> = {
+  ok: "text-emerald-400",
+  metric: "text-sky-400",
+  warn: "text-amber-400",
+  plain: "text-slate-300",
+};
+
+const { repo } = Astro.props;
+const demo = CLI_DEMOS[repo];
+---
+
+{
+  demo && (
+    <div
+      data-terminal-demo
+      data-command={demo.command}
+      class="mt-4 rounded-lg border border-slate-800 bg-[#090D16] font-mono text-xs text-slate-200 overflow-hidden shadow-md"
+    >
+      {/* Barra superior estilo Linux/macOS */}
+      <div class="flex items-center justify-between gap-2 px-3.5 py-2.5 bg-slate-900/90 border-b border-slate-800">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+            <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+            <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+          </div>
+          <span class="truncate text-[11px] sm:text-xs text-slate-400">
+            hugo@fedora:~/projetos/{repo}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          data-cli-run
+          class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded border border-slate-700 bg-slate-800/90 text-[11px] font-semibold text-slate-200 hover:border-[var(--accent-color)] hover:text-white transition-colors cursor-pointer"
+        >
+          ▶ Executar Demo
+        </button>
+      </div>
+
+      {/* Área de saída CLI */}
+      <div class="p-3.5 sm:p-4 space-y-2 leading-relaxed overflow-x-auto">
+        <div class="whitespace-pre-wrap break-words">
+          <span class="text-emerald-400 select-none">hugo@fedora</span>
+          <span class="text-slate-500 select-none">:</span>
+          <span class="text-sky-400 select-none">~/projetos/{repo}</span>
+          <span class="text-slate-400 select-none">$ </span>
+          <span data-cli-cmd class="text-slate-100 font-semibold" />
+          <span
+            data-cli-cursor
+            aria-hidden="true"
+            class="inline-block w-1.5 h-3.5 align-middle bg-emerald-400/90 ml-0.5 animate-pulse"
+          />
+        </div>
+
+        <div data-cli-output class="space-y-1 pt-0.5">
+          {demo.lines.map((line) => (
+            <div
+              data-cli-line
+              class={`hidden opacity-0 translate-y-0.5 transition-all duration-150 whitespace-pre-wrap break-words ${TONE_CLASS[line.tone ?? "plain"]}`}
+            >
+              {line.text}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  document.querySelectorAll<HTMLElement>("[data-terminal-demo]").forEach((term) => {
+    const cmdEl = term.querySelector<HTMLElement>("[data-cli-cmd]");
+    const runBtn = term.querySelector<HTMLButtonElement>("[data-cli-run]");
+    const cursorEl = term.querySelector<HTMLElement>("[data-cli-cursor]");
+    const lines = Array.from(term.querySelectorAll<HTMLElement>("[data-cli-line]"));
+    const command = term.getAttribute("data-command") ?? "";
+    let activeRunId = 0;
+
+    const resetTerminal = () => {
+      if (cmdEl) cmdEl.textContent = "";
+      cursorEl?.classList.remove("hidden");
+      lines.forEach((line) => {
+        line.classList.add("hidden", "opacity-0", "translate-y-0.5");
+      });
+    };
+
+    const runSimulation = async () => {
+      const runId = ++activeRunId;
+      resetTerminal();
+      if (runBtn) runBtn.textContent = "Executando...";
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) {
+        if (cmdEl) cmdEl.textContent = command;
+        lines.forEach((line) => {
+          line.classList.remove("hidden", "opacity-0", "translate-y-0.5");
+        });
+        if (runBtn) runBtn.textContent = "▶ Executar Demo";
+        return;
+      }
+
+      for (let i = 0; i < command.length; i++) {
+        if (runId !== activeRunId) return;
+        if (cmdEl) cmdEl.textContent = command.slice(0, i + 1);
+        await sleep(25);
+      }
+
+      await sleep(160);
+      for (const line of lines) {
+        if (runId !== activeRunId) return;
+        line.classList.remove("hidden");
+        requestAnimationFrame(() => {
+          if (runId === activeRunId) {
+            line.classList.remove("opacity-0", "translate-y-0.5");
+          }
+        });
+        await sleep(110);
+      }
+
+      if (runId === activeRunId && runBtn) {
+        runBtn.textContent = "▶ Executar Demo";
+      }
+    };
+
+    runBtn?.addEventListener("click", () => {
+      runSimulation();
+    });
+
+    term.addEventListener("cli:start", () => {
+      runSimulation();
+    });
+  });
+</script>

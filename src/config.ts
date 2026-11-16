@@ -29,11 +29,19 @@ export interface ExperienceItem {
   bullets: string[];
 }
 
+export interface EducationDomainSkill {
+  name: string;
+  detail: string;
+}
+
 export interface EducationItem {
   school: string;
   degree: string;
   dateRange: string;
   achievements: string[];
+  domainSkills: EducationDomainSkill[];
+  impactTitle?: string;
+  impactItems?: EducationDomainSkill[];
 }
 
 export interface CertificationPillar {
@@ -44,9 +52,24 @@ export interface CertificationPillar {
 export interface CertificationItem {
   name: string;
   issuer: string;
+  completedDate: string;
+  workload: string;
   badges: string[];
   pillars: CertificationPillar[];
+  imageUrl: string;
+  verifyUrl: string;
   credentialUrl?: string;
+}
+
+export interface ComplementaryCertification {
+  id: "google" | "duke";
+  issuer: string;
+  title: string;
+  subtitle: string;
+  credentialId: string;
+  verifyUrl: string;
+  logoSrc: string;
+  invertOnDark?: boolean;
 }
 
 export interface ServicePackage {
@@ -56,6 +79,12 @@ export interface ServicePackage {
   painSolved: string;
   deliverables: string[];
   proofAnchor: string;
+}
+
+export interface B2BImpactCard {
+  title: string;
+  detail: string;
+  iconKey: "postgresql" | "python" | "comex" | "docker";
 }
 
 export type ProfileMode = "clt" | "freela";
@@ -70,11 +99,14 @@ export interface SiteConfig {
   cta: ProfileCTA;
   social: SocialLinks;
   aboutMe: string;
+  aboutParagraphs?: string[];
   skills: string[];
+  impactCards?: B2BImpactCard[];
   projects: Project[];
   experience: ExperienceItem[];
   education: EducationItem[];
   certifications: CertificationItem[];
+  complementaryCertifications?: ComplementaryCertification[];
   packages?: ServicePackage[];
 }
 
@@ -100,12 +132,18 @@ const SHARED_SOCIAL: SocialLinks = {
   whatsapp: WHATSAPP_URL,
 };
 
-const CERTIFICATION_ISSUER = "IBM / Coursera — Credly Verified";
+const CERTIFICATION_ISSUER = "Coursera • Credly Verified";
+const DE_VERIFY_URL = "https://coursera.org/verify/professional-cert/F9UH4EHNP12E";
+const DA_VERIFY_URL = "https://coursera.org/verify/professional-cert/QELOOTV7YY0H";
 
 const CLT_CERTIFICATIONS: CertificationItem[] = [
   {
     name: "IBM Data Engineering Professional Certificate",
     issuer: CERTIFICATION_ISSUER,
+    completedDate: "Set. 2026",
+    workload: "~240 horas (16 cursos • 6 meses a 10h/semana)",
+    imageUrl: withBase("certs/ibm-data-engineering.png"),
+    verifyUrl: DE_VERIFY_URL,
     badges: [
       "PySpark",
       "Apache Kafka",
@@ -116,30 +154,34 @@ const CLT_CERTIFICATIONS: CertificationItem[] = [
     ],
     pillars: [
       {
-        title: "Big Data com Spark & Hadoop",
+        title: "Python & Linux para Engenharia de Dados",
         detail:
-          "Processamento distribuído de grandes volumes com PySpark, RDDs, DataFrames, MapReduce e ecossistema Hadoop.",
+          "Desenvolvimento de scripts ETL, manipulação de dados em Python e automação em Shell/Linux.",
       },
       {
-        title: "Streaming & Orquestração (Kafka / Airflow)",
+        title: "Pipelines ETL & Streaming",
         detail:
-          "Ingestão contínua de eventos em tempo real via Apache Kafka e orquestração de DAGs ETL/ELT no Apache Airflow.",
+          "Construção de fluxos de ingestão e orquestração com Apache Airflow, Apache Kafka e Shell.",
       },
       {
-        title: "NoSQL em Escala (MongoDB / Cassandra / Redis)",
+        title: "Bancos Relacionais, DBA & NoSQL",
         detail:
-          "Modelagem e persistência em bancos de documentos, colunas largas e cache em memória de baixa latência.",
+          "Administração SQL (RDBMS), tuning, modelagem e persistência em bancos NoSQL.",
       },
       {
-        title: "DBA Relacional & SQL Avançado",
+        title: "Big Data, Spark & BI",
         detail:
-          "Administração, modelagem normalizada, indexação, particionamento e tuning em PostgreSQL, MySQL e IBM Db2.",
+          "Processamento distribuído com Apache Spark / Hadoop, Machine Learning com Spark e dashboards em Looker / Cognos.",
       },
     ],
   },
   {
     name: "IBM Data Architect Professional Certificate",
     issuer: CERTIFICATION_ISSUER,
+    completedDate: "Set. 2026",
+    workload: "~160 horas (13 cursos • 4 meses a 10h/semana)",
+    imageUrl: withBase("certs/ibm-data-architect.png"),
+    verifyUrl: DA_VERIFY_URL,
     badges: [
       "Data Architecture",
       "Data Warehousing Kimball",
@@ -149,19 +191,24 @@ const CLT_CERTIFICATIONS: CertificationItem[] = [
     ],
     pillars: [
       {
-        title: "Data Warehousing Kimball",
+        title: "Enterprise Data Architecture & Operations",
         detail:
-          "Modelagem dimensional Star Schema e Snowflake, tabelas Fato/Dimensão, SCDs e criação de Data Marts para BI.",
+          "Desenho corporativo de plataformas de dados ponta a ponta, topologias híbridas e operação em escala.",
       },
       {
-        title: "Enterprise Data Governance & Privacy",
+        title: "Data Integration, Storage & Migration",
         detail:
-          "Linhagem de dados, catalogação, qualidade e contratos de dados, RBAC e conformidade de privacidade corporativa.",
+          "Estratégias de integração entre sistemas heterogêneos, arquitetura de armazenamento e migração segura sem perda de histórico.",
       },
       {
-        title: "Arquitetura de Plataformas de Dados",
+        title: "Privacy, Security, Governance & Compliance",
         detail:
-          "Desenho ponta a ponta de Data Lakes, Lakehouses e pipelines integrando workloads OLTP e OLAP.",
+          "Políticas de privacidade, controle de acesso, conformidade regulatória e gestão de risco em dados corporativos.",
+      },
+      {
+        title: "Data Warehouse & Capstone Arquitetural",
+        detail:
+          "Modelagem dimensional empresarial e projeto prático completo (Capstone) de arquitetura de dados.",
       },
     ],
   },
@@ -171,6 +218,10 @@ const FREELA_CERTIFICATIONS: CertificationItem[] = [
   {
     name: "IBM Data Engineering Professional Certificate",
     issuer: CERTIFICATION_ISSUER,
+    completedDate: "Set. 2026",
+    workload: "~240 horas (16 cursos • 6 meses a 10h/semana)",
+    imageUrl: withBase("certs/ibm-data-engineering.png"),
+    verifyUrl: DE_VERIFY_URL,
     badges: [
       "Automação Python & Linux",
       "Integração de APIs",
@@ -180,46 +231,60 @@ const FREELA_CERTIFICATIONS: CertificationItem[] = [
     ],
     pillars: [
       {
-        title: "Integração de APIs & Automação Python/Linux",
+        title: "Automação Python & Linux",
         detail:
-          "Substituição de extrações manuais por conectores autônomos tolerantes a falhas que sincronizam ERPs e APIs sem intervenção.",
+          "Substituição de extrações manuais por rotinas autônomas em Python e Shell que coletam ERPs e APIs sem intervenção.",
       },
       {
-        title: "Bancos SQL & MongoDB de Alta Performance",
+        title: "Pipelines Agendados & Streaming 24/7",
         detail:
-          "Armazenamento estruturado e rápido para eliminar lentidão de planilhas pesadas e evitar perda ou duplicidade de registros.",
+          "Orquestração automática (Airflow/Kafka) para entregar bases atualizadas diariamente antes do expediente.",
       },
       {
-        title: "Rotinas Contínuas 24/7",
+        title: "Bancos SQL & NoSQL de Alta Performance",
         detail:
-          "Orquestração automática e processamento incremental para entregar bases atualizadas diariamente antes do expediente.",
+          "Tuning em PostgreSQL e MongoDB para eliminar lentidão de planilhas pesadas e evitar duplicidade de registros.",
+      },
+      {
+        title: "Processamento Spark & Dashboards",
+        detail:
+          "Consolidação de grandes volumes e painéis analíticos claros conectados diretamente ao Looker / Power BI.",
       },
     ],
   },
   {
     name: "IBM Data Architect Professional Certificate",
     issuer: CERTIFICATION_ISSUER,
+    completedDate: "Set. 2026",
+    workload: "~160 horas (13 cursos • 4 meses a 10h/semana)",
+    imageUrl: withBase("certs/ibm-data-architect.png"),
+    verifyUrl: DA_VERIFY_URL,
     badges: [
+      "Arquitetura Corporativa",
       "Migração Segura de Dados",
       "Fonte Única da Verdade",
-      "BI & Relatórios",
       "Privacidade & Compliance",
     ],
     pillars: [
       {
-        title: "Migração Segura de Dados",
+        title: "Arquitetura Ponta a Ponta & Operações",
         detail:
-          "Consolidação organizada de planilhas Excel/Sheets e bases legadas em PostgreSQL sem perda histórica nem quebra de métricas.",
+          "Desenho estruturado de plataformas conectando sistemas operacionais e camada analítica para escalar sem retrabalho.",
       },
       {
-        title: "Modelagem Pronta para Diretoria (BI)",
+        title: "Migração Segura Sem Perda de Histórico",
         detail:
-          "Tabelas limpas e indexadas conectadas diretamente ao Power BI, Metabase ou Looker Studio com leitura instantânea.",
+          "Consolidação organizada de planilhas Excel/Sheets e bases legadas mantendo integridade integral das métricas.",
       },
       {
-        title: "Privacidade & Compliance",
+        title: "Privacidade, Segurança & Compliance",
         detail:
-          "Governança de dados, segregação de acessos e trilhas de auditoria protegendo informações financeiras e cadastrais do cliente.",
+          "Controle granular de acessos (RBAC), governança e trilhas de auditoria protegendo informações financeiras da empresa.",
+      },
+      {
+        title: "Data Warehouse & Capstone Corporativo",
+        detail:
+          "Modelagem dimensional pronta para diretoria validada em projeto prático completo de arquitetura.",
       },
     ],
   },
@@ -246,6 +311,10 @@ export const cltConfig: SiteConfig = {
   social: SHARED_SOCIAL,
   aboutMe:
     "Engenheiro de Dados e Desenvolvedor Backend Python focado em arquiteturas resilientes, integridade transacional e governança de dados guiada por contratos executáveis (ODCS v3.2.0) e validação shift-left com Pydantic V2. Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM e graduando em Comércio Exterior pela PUCRS.",
+  aboutParagraphs: [
+    "Engenheiro de Dados e Desenvolvedor Backend Python focado em arquiteturas resilientes, integridade transacional e governança de dados guiada por contratos executáveis (ODCS v3.2.0) e validação shift-left com Pydantic V2.",
+    "Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM e graduando em Comércio Exterior pela PUCRS.",
+  ],
   skills: [
     "Python 3.12",
     "PostgreSQL 16 & PL/pgSQL",
@@ -343,7 +412,7 @@ export const cltConfig: SiteConfig = {
     {
       company: "Projetos e Consultoria B2B (Upwork, Workana & Direto)",
       title: "Engenheiro de Dados & Desenvolvedor Backend Freelance",
-      dateRange: "Out. 2024 – Presente",
+      dateRange: "Out. 2025 – Presente",
       bullets: [
         "Projetou e operou esteiras automatizadas de ingestão e transformação de dados com Python 3.12 e SQL, persistindo bases relacionais com garantia de idempotência e zero duplicatas em reprocessamentos.",
         "Implementou esteiras conteinerizadas com Docker Compose e agendamentos automatizados em Linux nativo, com rastreabilidade operacional via tabelas de auditoria transacional (pipeline runs audit).",
@@ -360,9 +429,72 @@ export const cltConfig: SiteConfig = {
         "Domínio de regras cambiais, Incoterms 2020, classificação NCM e formação de tributos aduaneiros aplicados diretamente à modelagem de dados financeiros e fiscais.",
         "Base quantitativa e regulatória voltada à governança de fluxos cross-border e conciliação contábil.",
       ],
+      domainSkills: [
+        {
+          name: "Contabilidade Fiduciária (CPC 16 / IAS 2)",
+          detail:
+            "Modelagem de partidas dobradas e custo de internação auditável.",
+        },
+        {
+          name: "Liquidação Cambial SWIFT (ISO 20022)",
+          detail:
+            "Conciliação multi-moeda e split automático de tarifas bancárias.",
+        },
+        {
+          name: "Regras Tributárias em Cascata",
+          detail:
+            'Implementação determinística de II, IPI, PIS/COFINS e ICMS "por dentro".',
+        },
+        {
+          name: "Série Temporal & PTAX (BACEN)",
+          detail:
+            "Tratamento de feriados/fins de semana via LOCF sem lookahead bias.",
+        },
+      ],
+      impactTitle: "Impacto na Engenharia",
+      impactItems: [
+        {
+          name: "Semântica Contábil & Fiscal",
+          detail:
+            "Modelagem nativa de partidas dobradas, CPC 16 e impostos em cascata sem depender de tradução de analistas.",
+        },
+        {
+          name: "Rigor em Séries Temporais",
+          detail:
+            "Tratamento de feriados bancários e câmbio PTAX (LOCF) sem lookahead bias.",
+        },
+        {
+          name: "Governança Auditável",
+          detail:
+            "Contratos ODCS v3.2.0 alinhados às exigências reais de auditoria aduaneira e financeira.",
+        },
+      ],
     },
   ],
   certifications: CLT_CERTIFICATIONS,
+  complementaryCertifications: [
+    {
+      id: "google",
+      issuer: "Google",
+      title: "Agile Project Management",
+      subtitle: "Scrum, Kanban & Entregas Incrementais",
+      credentialId: "OWLH8130V8BT",
+      verifyUrl:
+        "https://www.coursera.org/account/accomplishments/verify/OWLH8130V8BT",
+      logoSrc: withBase("icons/google.svg"),
+    },
+    {
+      id: "duke",
+      issuer: "Duke University",
+      title: "Business Metrics for Data-Driven Companies",
+      subtitle: "KPIs, BI & Análise Orientada a Dados",
+      credentialId: "08CS9SA6U68D",
+      verifyUrl:
+        "https://www.coursera.org/account/accomplishments/verify/08CS9SA6U68D",
+      logoSrc: withBase("icons/duke.svg"),
+      invertOnDark: true,
+    },
+  ],
 };
 
 export const freelaConfig: SiteConfig = {
@@ -383,6 +515,36 @@ export const freelaConfig: SiteConfig = {
   social: SHARED_SOCIAL,
   aboutMe:
     "Ajudo empresas, importadoras e operações B2B a eliminar planilhas manuais que travam, integrações frágeis de ERPs e retrabalho financeiro através de pipelines de dados que rodam sozinhos em segundo plano. Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com formação em Comércio Exterior (PUCRS) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
+  aboutParagraphs: [
+    "Ajudo empresas, importadoras e operações B2B a eliminar planilhas manuais que travam, integrações frágeis de ERPs e retrabalho financeiro através de pipelines de dados que rodam sozinhos em segundo plano.",
+    "Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com formação em Comércio Exterior (PUCRS) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
+  ],
+  impactCards: [
+    {
+      title: "Fim das Planilhas Manuais",
+      detail:
+        "Migração estruturada de Excel/Sheets para PostgreSQL com zero duplicatas.",
+      iconKey: "postgresql",
+    },
+    {
+      title: "Integração Resiliente de ERPs & APIs",
+      detail:
+        "Conectores automáticos (Bling, Omie, Tiny, BACEN) com retry e log de auditoria.",
+      iconKey: "python",
+    },
+    {
+      title: "Automação Comex & Câmbio PTAX",
+      detail:
+        "Cruzamento oficial MDIC/NCM, impostos em cascata e fechamento cambial.",
+      iconKey: "comex",
+    },
+    {
+      title: "Deploy Enxuto em Docker",
+      detail:
+        "Infraestrutura isolada de baixo custo e views prontas para Power BI / Metabase.",
+      iconKey: "docker",
+    },
+  ],
   skills: [
     "Integração de ERPs (Bling, Omie, Tiny)",
     "Migração Excel / Sheets → PostgreSQL",
@@ -511,9 +673,9 @@ export const freelaConfig: SiteConfig = {
   ],
   experience: [
     {
-      company: "Projetos e Consultoria B2B (Upwork, Workana & Direto)",
+      company: "Consultoria B2B & Engenharia de Dados sob Demanda",
       title: "Engenheiro de Dados & Consultor em Automação B2B",
-      dateRange: "Out. 2024 – Presente",
+      dateRange: "Out. 2025 – Presente",
       bullets: [
         "Entrega de esteiras automatizadas de ingestão via Python e SQL com garantia de zero duplicatas e redução do retrabalho manual em planilhas.",
         "Implantação padronizada em Docker Compose com agendamento autônomo e tabela de auditoria transacional para dar visibilidade total ao gestor sobre cada execução.",
@@ -530,9 +692,72 @@ export const freelaConfig: SiteConfig = {
         "Diferencial de negócio para operações de importação/exportação: domínio prático de NCM, Incoterms 2020 (FOB/CIF), câmbio PTAX e composição de custos aduaneiros.",
         "Capacidade de alinhar diretamente regras fiscais e operacionais com o desenho técnico de bancos de dados e painéis gerenciais.",
       ],
+      domainSkills: [
+        {
+          name: "Cálculo Automático de Landed Cost",
+          detail:
+            "Substituição de planilhas complexas de custo por NCM sem erro de arredondamento.",
+        },
+        {
+          name: "Integração Siscomex / Comex Stat",
+          detail:
+            "Cruzamento automático de microdados aduaneiros (MDIC) com embarques internos.",
+        },
+        {
+          name: "Auditoria de Frete & Incoterms (FOB/CIF)",
+          detail:
+            "Conferência automática de faturas internacionais e variação cambial.",
+        },
+        {
+          name: "Fechamento Cambial sem Retrabalho",
+          detail:
+            "Sincronização diária automática da PTAX oficial do Banco Central no banco/BI.",
+        },
+      ],
+      impactTitle: "Vantagem para sua Operação",
+      impactItems: [
+        {
+          name: "Falamos a Mesma Língua",
+          detail:
+            "Você não precisa me explicar o que é NCM, DI/DUIMP, FOB, CIF ou fechamento de câmbio.",
+        },
+        {
+          name: "Custo de Internação Exato",
+          detail:
+            "Automação do cálculo de Landed Cost sem erros de fórmula no Excel.",
+        },
+        {
+          name: "Integração Direta ao seu BI",
+          detail:
+            "Cruzamento automático entre bases públicas (MDIC/BACEN) e os pedidos do seu ERP.",
+        },
+      ],
     },
   ],
   certifications: FREELA_CERTIFICATIONS,
+  complementaryCertifications: [
+    {
+      id: "duke",
+      issuer: "Duke University",
+      title: "Business Metrics for Data-Driven Companies",
+      subtitle: "Métricas de Negócio & BI para Decisão",
+      credentialId: "08CS9SA6U68D",
+      verifyUrl:
+        "https://www.coursera.org/account/accomplishments/verify/08CS9SA6U68D",
+      logoSrc: withBase("icons/duke.svg"),
+      invertOnDark: true,
+    },
+    {
+      id: "google",
+      issuer: "Google",
+      title: "Agile Project Management",
+      subtitle: "Gestão por Marcos & Escopo Fechado",
+      credentialId: "OWLH8130V8BT",
+      verifyUrl:
+        "https://www.coursera.org/account/accomplishments/verify/OWLH8130V8BT",
+      logoSrc: withBase("icons/google.svg"),
+    },
+  ],
 };
 
 /**

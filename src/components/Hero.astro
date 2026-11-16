@@ -1,202 +1,164 @@
 ---
 import { cltConfig, freelaConfig, siteConfig } from "../config";
+import { getTechIconByKey } from "../utils/techIcons";
+
+const GEAR_PRIMARY_PATH =
+  "M19.07,5.85 L20.43,1.98 L22.81,2.53 L22.35,6.60 L24.28,7.54 L26.01,8.80 L29.38,6.47 L30.99,8.31 L28.22,11.33 L29.23,13.23 L29.89,15.26 L33.98,15.37 L34.20,17.80 L30.18,18.61 L29.89,20.74 L29.23,22.77 L32.48,25.26 L31.22,27.36 L27.50,25.66 L26.01,27.20 L24.28,28.46 L25.45,32.39 L23.20,33.34 L21.18,29.78 L19.07,30.15 L16.93,30.15 L15.57,34.02 L13.19,33.47 L13.65,29.40 L11.72,28.46 L9.99,27.20 L6.62,29.53 L5.01,27.69 L7.78,24.67 L6.77,22.77 L6.11,20.74 L2.02,20.63 L1.80,18.20 L5.82,17.39 L6.11,15.26 L6.77,13.23 L3.52,10.74 L4.78,8.64 L8.50,10.34 L9.99,8.80 L11.72,7.54 L10.55,3.61 L12.80,2.66 L14.82,6.22 L16.93,5.85 Z M 23.2,18 A 5.2,5.2 0 1,0 12.8,18 A 5.2,5.2 0 1,0 23.2,18 Z";
+
+const GEAR_SECONDARY_PATH =
+  "M15.03,4.66 L16.44,1.23 L18.79,1.91 L18.14,5.56 L19.88,6.66 L21.34,8.12 L24.75,6.69 L25.93,8.84 L22.89,10.96 L23.34,12.97 L23.34,15.03 L26.77,16.44 L26.09,18.79 L22.44,18.14 L21.34,19.88 L19.88,21.34 L21.31,24.75 L19.16,25.93 L17.04,22.89 L15.03,23.34 L12.97,23.34 L11.56,26.77 L9.21,26.09 L9.86,22.44 L8.12,21.34 L6.66,19.88 L3.25,21.31 L2.07,19.16 L5.11,17.04 L4.66,15.03 L4.66,12.97 L1.23,11.56 L1.91,9.21 L5.56,9.86 L6.66,8.12 L8.12,6.66 L6.69,3.25 L8.84,2.07 L10.96,5.11 L12.97,4.66 Z M 18,14 A 4,4 0 1,0 10,14 A 4,4 0 1,0 18,14 Z";
+
+const heroPipelineStages = [
+  {
+    step: "01",
+    iconKey: "python" as const,
+    cltTag: "FONTES",
+    cltTitle: "BACEN PTAX · MDIC · Market Feeds",
+    freelaTag: "ENTRADA",
+    freelaTitle: "ERPs, Planilhas & Cotações",
+  },
+  {
+    step: "02",
+    iconKey: "databricks" as const,
+    cltTag: "SHIFT-LEFT",
+    cltTitle: "Contratos ODCS v3.2.0 + Pydantic V2",
+    freelaTag: "BLINDAGEM",
+    freelaTitle: "Filtro Anti-Erro & Zero Duplicatas",
+  },
+  {
+    step: "03",
+    iconKey: "postgresql" as const,
+    cltTag: "STORAGE ACID",
+    cltTitle: "PostgreSQL 16 · Delta Lake · SQLite WAL",
+    freelaTag: "BANCO ÚNICO",
+    freelaTitle: "Base Relacional em Docker Compose",
+  },
+  {
+    step: "04",
+    iconKey: "snowflake" as const,
+    cltTag: "SERVING & OBS",
+    cltTitle: "Snowflake Kimball · DuckDB · Outbox",
+    freelaTag: "RESULTADO",
+    freelaTitle: "Power BI Diário & Alertas 24/7",
+  },
+] as const;
 ---
 
 <section
   id="hero"
-  class="relative isolate overflow-hidden bg-white min-h-screen flex flex-col justify-between"
+  class="relative overflow-hidden min-h-screen flex flex-col justify-between transition-colors duration-300"
 >
   <!-- Gradient overlays por modo (zero flash na pintura inicial) -->
   <div
     aria-hidden="true"
-    class="hero-bg-clt absolute inset-0 -z-10 transition-opacity duration-500"
-    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${cltConfig.accentColor}40 0%, ${cltConfig.accentColor}25 20%, ${cltConfig.accentColor}10 40%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0.8) 90%, white 100%)`}
+    class="hero-bg-clt absolute inset-0 -z-10 pointer-events-none transition-opacity duration-500"
   >
   </div>
   <div
     aria-hidden="true"
-    class="hero-bg-freela absolute inset-0 -z-10 transition-opacity duration-500"
-    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${freelaConfig.accentColor}40 0%, ${freelaConfig.accentColor}25 20%, ${freelaConfig.accentColor}10 40%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0.8) 90%, white 100%)`}
+    class="hero-bg-freela absolute inset-0 -z-10 pointer-events-none transition-opacity duration-500"
   >
   </div>
 
-  <svg
-    aria-hidden="true"
-    class="absolute inset-0 -z-10 size-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-  >
-    <defs>
-      <pattern
-        x="50%"
-        y={-1}
-        id="0787a7c5-978c-4f66-83c7-11c213f99cb7"
-        width={200}
-        height={200}
-        patternUnits="userSpaceOnUse"
-      >
-        <path d="M.5 200V.5H200" fill="none"></path>
-      </pattern>
-      <pattern
-        id="programming-symbols"
-        x="0"
-        y="0"
-        width="400"
-        height="400"
-        patternUnits="userSpaceOnUse"
-      >
-        <g style="fill: var(--accent-color)">
-          <text x="50" y="50" font-family="monospace" font-size="24" transform="rotate(-15)">&lt;/&gt;</text>
-          <text x="150" y="100" font-family="monospace" font-size="20" transform="rotate(10)">{"{}"}</text>
-          <text x="250" y="80" font-family="monospace" font-size="18" transform="rotate(-5)">=&gt;</text>
-          <text x="100" y="200" font-family="monospace" font-size="22" transform="rotate(15)">[]</text>
-          <text x="300" y="180" font-family="monospace" font-size="20" transform="rotate(-10)">&lt;&gt;</text>
-          <text x="200" y="250" font-family="monospace" font-size="24" transform="rotate(5)">()</text>
-          <text x="50" y="320" font-family="monospace" font-size="18" transform="rotate(-8)">::</text>
-          <text x="350" y="300" font-family="monospace" font-size="22" transform="rotate(12)">==</text>
-          <text x="150" y="350" font-family="monospace" font-size="20" transform="rotate(-15)">++</text>
-          <text x="250" y="370" font-family="monospace" font-size="24" transform="rotate(8)">;</text>
-        </g>
-      </pattern>
-    </defs>
-    <rect fill="url(#programming-symbols)" width="100%" height="100%" opacity="0.2"></rect>
-    <rect fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" width="100%" height="100%" stroke-width={0}></rect>
-  </svg>
+  <div class="w-full flex-1 flex items-center px-8 pt-24 pb-8 sm:px-12 sm:pt-28 md:px-20 lg:px-24 md:pt-28">
+    <div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <!-- Coluna esquerda: Identidade, Engrenagens e CTA (7 colunas) -->
+      <div class="lg:col-span-7">
+        <p class="text-pretty text-xl sm:text-2xl md:text-4xl font-bold tracking-tight text-gray-700 dark:text-slate-300 animate-fade-in">
+          Olá! 👋
+        </p>
+        <h1 class="mt-4 sm:mt-6 md:mt-8 text-pretty text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-gray-800 dark:text-slate-100 animate-fade-in animation-delay-200">
+          Eu sou <span class="transition-colors duration-300" style="color: var(--accent-color)">{siteConfig.name}</span>
+        </h1>
 
-  <div class="w-full flex-1 flex items-center px-8 pt-24 pb-8 sm:px-12 sm:pt-28 md:px-24 md:pt-28">
-    <div class="max-w-5xl">
-      <p class="text-pretty text-xl sm:text-2xl md:text-4xl font-bold tracking-tight text-gray-700 animate-fade-in">
-        Olá! 👋
-      </p>
-      <h1 class="mt-4 sm:mt-6 md:mt-8 text-pretty text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-gray-800 animate-fade-in animation-delay-200">
-        Eu sou <span class="transition-colors duration-300" style="color: var(--accent-color)">{siteConfig.name}</span>
-      </h1>
+        <p class="mode-clt mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 dark:text-slate-300 animate-fade-in animation-delay-400">
+          {cltConfig.title}
+        </p>
+        <p class="mode-freela mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 dark:text-slate-300 animate-fade-in animation-delay-400">
+          {freelaConfig.title}
+        </p>
 
-      <p class="mode-clt mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 animate-fade-in animation-delay-400">
-        {cltConfig.title}
-      </p>
-      <p class="mode-freela mt-4 sm:mt-6 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 animate-fade-in animation-delay-400">
-        {freelaConfig.title}
-      </p>
-
-      <!-- Seletor interativo de duas engrenagens -->
-      <div
-        role="group"
-        aria-label="Selecionar modo de visualização do portfólio"
-        class="mt-6 sm:mt-8 grid grid-cols-1 sm:inline-grid sm:grid-cols-2 gap-3 w-full sm:w-auto animate-fade-in animation-delay-400"
-      >
-        <button
-          type="button"
-          data-mode-btn="clt"
-          aria-pressed="true"
-          class="mode-btn mode-btn-clt group flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border bg-white/90 backdrop-blur-sm text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--clt-accent)]"
+        <!-- Seletor interativo de engrenagens mecânicas acopladas -->
+        <div
+          role="group"
+          aria-label="Selecionar modo de visualização do portfólio"
+          class="mode-dock mt-6 sm:mt-8 rounded-2xl border border-gray-200 dark:border-slate-800 p-1.5 sm:p-2 bg-white/90 dark:bg-[#111827]/90 backdrop-blur-sm transition-all duration-300 flex flex-col sm:inline-flex sm:flex-row sm:items-stretch gap-2 w-full sm:w-auto animate-fade-in animation-delay-400"
         >
-          <span class="gear-badge gear-badge-clt flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg border transition-colors duration-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              class="gear-icon gear-clt transition-transform duration-500 ease-out"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-              <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-            </svg>
-          </span>
-          <span class="min-w-0">
-            <span class="block text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
-              Modo Recrutador (CLT / Tech)
-            </span>
-            <span class="block text-[11px] sm:text-xs text-gray-600 leading-snug mt-0.5">
-              Arquitetura, Stack &amp; ODCS v3.2.0
-            </span>
-          </span>
-        </button>
-
-        <button
-          type="button"
-          data-mode-btn="freela"
-          aria-pressed="false"
-          class="mode-btn mode-btn-freela group flex items-center gap-2.5 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 rounded-xl border bg-white/90 backdrop-blur-sm text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--freela-accent)]"
-        >
-          <span class="gear-badge gear-badge-freela flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg border transition-colors duration-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              class="gear-icon gear-freela transition-transform duration-500 ease-out"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-              <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-            </svg>
-          </span>
-          <span class="min-w-0">
-            <span class="block text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
-              Modo Empresa (Freelancer B2B)
-            </span>
-            <span class="block text-[11px] sm:text-xs text-gray-600 leading-snug mt-0.5">
-              ROI, Automação &amp; Pacotes B2B
-            </span>
-          </span>
-        </button>
-      </div>
-
-      <!-- CTA dinâmico por modo -->
-      <div class="mt-6 flex flex-wrap items-center gap-3 animate-fade-in animation-delay-600">
-        <a
-          href={cltConfig.cta.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mode-clt inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-5 py-3 rounded-xl text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5"
-          style="background-color: var(--clt-accent)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+          {/* Câmara das 2 engrenagens acopladas (36px + 28px) com halo ativo */}
+          <div
             aria-hidden="true"
-            class="shrink-0"
+            class="gear-chamber relative shrink-0 h-14 sm:h-auto sm:w-[78px] rounded-xl border border-gray-200/80 dark:border-slate-800 bg-gray-50/90 dark:bg-[#0B0F17]/90 flex items-center justify-center overflow-hidden transition-all duration-500"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-            <path d="M7 11l5 5l5 -5" />
-            <path d="M12 4l0 12" />
-          </svg>
-          {cltConfig.cta.label}
-        </a>
+            <div class="gear-halo absolute inset-0 pointer-events-none transition-all duration-500" />
+            <div class="relative w-[58px] h-[50px]">
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 36 36"
+                fill="currentColor"
+                fill-rule="evenodd"
+                class="gear-primary absolute top-0.5 left-0.5 w-[36px] h-[36px] transition-transform duration-500 ease-out"
+                style="color: var(--accent-color)"
+              >
+                <path d={GEAR_PRIMARY_PATH} />
+              </svg>
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="currentColor"
+                fill-rule="evenodd"
+                class="gear-secondary absolute top-[21px] left-[27px] w-[28px] h-[28px] text-gray-500 dark:text-slate-400 transition-transform duration-500 ease-out"
+              >
+                <path d={GEAR_SECONDARY_PATH} />
+              </svg>
+            </div>
+          </div>
 
-        <a
-          href={freelaConfig.cta.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mode-freela inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-5 py-3 rounded-xl text-[13px] sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 text-center"
-          style="background-color: var(--freela-accent)"
-        >
-          <span>
-            {freelaConfig.cta.label}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 flex-1">
+            <button
+              type="button"
+              data-mode-btn="clt"
+              aria-pressed="true"
+              class="mode-btn mode-btn-clt group flex flex-col justify-center px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-transparent text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--clt-accent)]"
+            >
+              <span class="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-slate-100 leading-snug">
+                Modo Recrutador (CLT / Tech)
+              </span>
+              <span class="block text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
+                Arquitetura, Stack &amp; ODCS v3.2.0
+              </span>
+            </button>
+
+            <button
+              type="button"
+              data-mode-btn="freela"
+              aria-pressed="false"
+              class="mode-btn mode-btn-freela group flex flex-col justify-center px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl border border-transparent text-left transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--freela-accent)]"
+            >
+              <span class="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-slate-100 leading-snug">
+                Modo Empresa (Freelancer B2B)
+              </span>
+              <span class="block text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
+                ROI, Automação &amp; Pacotes B2B
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CTA dinâmico por modo -->
+        <div class="mt-6 flex flex-wrap items-center gap-3 animate-fade-in animation-delay-600">
+          <a
+            href={cltConfig.cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mode-clt inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-5 py-3 rounded-xl text-sm sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5"
+            style="background-color: var(--clt-accent)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="17"
-              height="17"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -204,31 +166,182 @@ import { cltConfig, freelaConfig, siteConfig } from "../config";
               stroke-linecap="round"
               stroke-linejoin="round"
               aria-hidden="true"
-              class="inline-block ml-1.5 -mt-0.5 shrink-0"
+              class="shrink-0"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M7 17l10 -10" />
-              <path d="M7 7h10v10" />
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+              <path d="M7 11l5 5l5 -5" />
+              <path d="M12 4l0 12" />
             </svg>
-          </span>
-        </a>
+            {cltConfig.cta.label}
+          </a>
 
-        {
-          freelaConfig.cta.secondaryHref && freelaConfig.cta.secondaryLabel && (
-            <a
-              href={freelaConfig.cta.secondaryHref}
-              class="mode-freela inline-flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-3 rounded-xl border border-gray-300 bg-white/90 text-sm sm:text-base font-medium text-gray-700 transition-colors duration-300 hover:border-gray-400 hover:text-gray-900"
-            >
-              {freelaConfig.cta.secondaryLabel}
-            </a>
-          )
-        }
+          <a
+            href={freelaConfig.cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mode-freela inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-5 py-3 rounded-xl text-[13px] sm:text-base font-semibold text-white shadow-sm transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 text-center"
+            style="background-color: var(--freela-accent)"
+          >
+            <span>
+              {freelaConfig.cta.label}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="inline-block ml-1.5 -mt-0.5 shrink-0"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M7 17l10 -10" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </span>
+          </a>
+
+          {
+            freelaConfig.cta.secondaryHref && freelaConfig.cta.secondaryLabel && (
+              <a
+                href={freelaConfig.cta.secondaryHref}
+                class="mode-freela inline-flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white/90 dark:bg-[#111827]/90 text-sm sm:text-base font-medium text-gray-700 dark:text-slate-200 transition-colors duration-300 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100"
+              >
+                {freelaConfig.cta.secondaryLabel}
+              </a>
+            )
+          }
+        </div>
+
+        <!-- Barra de Telemetria / Prova Rápida -->
+        <div class="mt-6 pt-5 border-t border-gray-200/80 dark:border-slate-800/80 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] sm:text-xs font-mono text-gray-600 dark:text-slate-400 animate-fade-in animation-delay-600">
+          <span>
+            <strong class="text-gray-900 dark:text-slate-200 font-semibold">ODCS v3.2.0</strong> • Contratos Executáveis
+          </span>
+          <span aria-hidden="true" class="hidden sm:inline text-gray-300 dark:text-slate-700">|</span>
+          <span>
+            <strong class="text-gray-900 dark:text-slate-200 font-semibold">100% Docker</strong> • Linux &amp; CI/CD Verified
+          </span>
+          <span aria-hidden="true" class="hidden sm:inline text-gray-300 dark:text-slate-700">|</span>
+          <span>
+            <strong class="text-gray-900 dark:text-slate-200 font-semibold">Comex &amp; Dados</strong> • PUCRS + IBM Certified
+          </span>
+        </div>
       </div>
+
+      <!-- Coluna direita: Diagrama minimalista animado de pipeline (5 colunas, desktop) -->
+      <aside
+        aria-label="Arquitetura de pipeline de dados"
+        class="hidden lg:flex lg:col-span-5 items-center justify-center animate-fade-in animation-delay-400"
+      >
+        <div class="pipeline-card w-full max-w-lg rounded-2xl border border-gray-200/90 dark:border-slate-800 bg-white/90 dark:bg-[#111827]/95 backdrop-blur-md p-6 shadow-md transition-all duration-300">
+          <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-gray-100 dark:border-slate-800">
+            <span class="mode-clt text-xs font-mono font-semibold text-gray-600 dark:text-slate-400">
+              pipeline_topology · ODCS v3.2.0
+            </span>
+            <span class="mode-freela text-xs font-mono font-semibold text-gray-600 dark:text-slate-400">
+              automacao_b2b · SLA Ativo
+            </span>
+            <span
+              class="inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold"
+              style="color: var(--accent-color)"
+            >
+              <span
+                class="h-2 w-2 rounded-full animate-pulse"
+                style="background-color: var(--accent-color)"
+              />
+              <span class="mode-clt">ACID</span>
+              <span class="mode-freela">24/7</span>
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center">
+            {
+              heroPipelineStages.map((stage, idx) => {
+                const icon = getTechIconByKey(stage.iconKey);
+                return (
+                  <>
+                    <div class="w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/90 dark:bg-[#0B0F17]/90 px-4 py-3 transition-colors duration-300 hover:bg-white dark:hover:bg-slate-900 hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60">
+                      <div class="flex items-center justify-between gap-2">
+                        <span
+                          class="text-[11px] font-mono font-semibold"
+                          style="color: var(--accent-color)"
+                        >
+                          <span class="mode-clt">{stage.step} · {stage.cltTag}</span>
+                          <span class="mode-freela">{stage.step} · {stage.freelaTag}</span>
+                        </span>
+                        <span class="h-1.5 w-1.5 rounded-full bg-gray-300 dark:bg-slate-700" />
+                      </div>
+                      <div class="mt-1.5 flex items-center gap-2">
+                        <img
+                          src={icon.src}
+                          alt=""
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          class="w-3.5 h-3.5 shrink-0 object-contain"
+                        />
+                        <p class="mode-clt text-xs font-semibold text-gray-800 dark:text-slate-100 leading-snug">
+                          {stage.cltTitle}
+                        </p>
+                        <p class="mode-freela text-xs font-semibold text-gray-800 dark:text-slate-100 leading-snug">
+                          {stage.freelaTitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    {idx < heroPipelineStages.length - 1 && (
+                      <svg
+                        width="24"
+                        height="22"
+                        viewBox="0 0 24 22"
+                        fill="none"
+                        aria-hidden="true"
+                        class="my-0.5 overflow-visible"
+                      >
+                        <line
+                          x1="12"
+                          y1="0"
+                          x2="12"
+                          y2="17"
+                          stroke="var(--accent-color)"
+                          stroke-width="2"
+                          stroke-dasharray="4 4"
+                          class="pipeline-flow-stroke"
+                        />
+                        <circle
+                          cx="12"
+                          cy="2"
+                          r="2.4"
+                          fill="var(--accent-color)"
+                          class="pipeline-pulse-dot"
+                          style={`animation-delay: ${idx * 350}ms;`}
+                        />
+                        <path
+                          d="M8.5 13.5L12 18L15.5 13.5"
+                          stroke="var(--accent-color)"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </>
+                );
+              })
+            }
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 
   <div
-    class="px-8 pb-8 pt-4 sm:px-12 sm:pb-12 md:px-24 md:pb-16 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700 animate-fade-in animation-delay-600"
+    class="px-8 pb-8 pt-4 sm:px-12 sm:pb-12 md:px-20 lg:px-24 md:pb-14 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700 dark:text-slate-400 animate-fade-in animation-delay-600"
   >
     {
       siteConfig.social?.email && (
@@ -404,12 +517,26 @@ import { cltConfig, freelaConfig, siteConfig } from "../config";
 </script>
 
 <style>
-  .hero-bg-freela {
-    opacity: 0;
+  .hero-bg-clt {
+    background: radial-gradient(
+      ellipse 800px 1200px at 0% 0%,
+      color-mix(in srgb, var(--clt-accent) 22%, transparent) 0%,
+      color-mix(in srgb, var(--clt-accent) 12%, transparent) 22%,
+      color-mix(in srgb, var(--clt-accent) 5%, transparent) 44%,
+      transparent 75%
+    );
+    opacity: 1;
   }
 
-  .hero-bg-clt {
-    opacity: 1;
+  .hero-bg-freela {
+    background: radial-gradient(
+      ellipse 800px 1200px at 0% 0%,
+      color-mix(in srgb, var(--freela-accent) 22%, transparent) 0%,
+      color-mix(in srgb, var(--freela-accent) 12%, transparent) 22%,
+      color-mix(in srgb, var(--freela-accent) 5%, transparent) 44%,
+      transparent 75%
+    );
+    opacity: 0;
   }
 
   :global(html[data-mode="freela"]) .hero-bg-clt {
@@ -420,52 +547,121 @@ import { cltConfig, freelaConfig, siteConfig } from "../config";
     opacity: 1;
   }
 
-  /* Estado visual das engrenagens + rotação acoplada oposta */
-  .mode-btn {
-    border-color: rgb(209 213 219);
+  .pipeline-flow-stroke {
+    animation: flowDash 1.1s linear infinite;
   }
 
-  .gear-badge {
-    border-color: rgb(209 213 219);
-    background-color: rgb(249 250 251);
-    color: rgb(75 85 99);
+  .pipeline-pulse-dot {
+    animation: pulseDrop 1.4s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px var(--accent-color));
+  }
+
+  @keyframes flowDash {
+    to {
+      stroke-dashoffset: -16;
+    }
+  }
+
+  @keyframes pulseDrop {
+    0% {
+      transform: translateY(0px);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0.95;
+    }
+    100% {
+      transform: translateY(13px);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pipeline-flow-stroke,
+    .pipeline-pulse-dot {
+      animation: none;
+    }
+    .pipeline-pulse-dot {
+      opacity: 0;
+    }
+  }
+
+  /* Dock seletor + câmara de engrenagens acopladas com halo na cor temática */
+  .mode-dock {
+    box-shadow: 0 6px 24px -8px color-mix(in srgb, var(--accent-color) 28%, transparent);
+  }
+
+  :global(html.dark) .mode-dock {
+    box-shadow: 0 8px 30px -10px color-mix(in srgb, var(--accent-color) 35%, transparent);
+  }
+
+  .gear-halo {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent-color) 22%, transparent) 0%,
+      transparent 72%
+    );
+  }
+
+  :global(html.dark) .gear-halo {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--accent-color) 28%, transparent) 0%,
+      transparent 75%
+    );
+  }
+
+  .gear-chamber {
+    border-color: color-mix(in srgb, var(--accent-color) 35%, rgb(229 231 235));
+  }
+
+  :global(html.dark) .gear-chamber {
+    border-color: color-mix(in srgb, var(--accent-color) 42%, rgb(30 41 59));
+  }
+
+  .pipeline-card {
+    box-shadow: 0 10px 32px -12px color-mix(in srgb, var(--accent-color) 18%, rgba(15, 23, 42, 0.08));
+  }
+
+  :global(html.dark) .pipeline-card {
+    box-shadow: 0 14px 40px -14px color-mix(in srgb, var(--accent-color) 26%, transparent);
   }
 
   :global(html:not([data-mode="freela"])) .mode-btn-clt {
     border-color: var(--clt-accent);
-    background-color: color-mix(in srgb, var(--clt-accent) 6%, white);
-    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--clt-accent) 25%, transparent);
+    background-color: color-mix(in srgb, var(--clt-accent) 8%, white);
   }
 
-  :global(html:not([data-mode="freela"])) .gear-badge-clt {
-    border-color: color-mix(in srgb, var(--clt-accent) 30%, white);
-    background-color: color-mix(in srgb, var(--clt-accent) 12%, white);
-    color: var(--clt-accent);
+  :global(html.dark:not([data-mode="freela"])) .mode-btn-clt {
+    border-color: var(--clt-accent);
+    background-color: color-mix(in srgb, var(--clt-accent) 16%, #111827);
   }
 
   :global(html[data-mode="freela"]) .mode-btn-freela {
     border-color: var(--freela-accent);
-    background-color: color-mix(in srgb, var(--freela-accent) 6%, white);
-    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--freela-accent) 25%, transparent);
+    background-color: color-mix(in srgb, var(--freela-accent) 8%, white);
   }
 
-  :global(html[data-mode="freela"]) .gear-badge-freela {
-    border-color: color-mix(in srgb, var(--freela-accent) 30%, white);
-    background-color: color-mix(in srgb, var(--freela-accent) 12%, white);
-    color: var(--freela-accent);
+  :global(html.dark[data-mode="freela"]) .mode-btn-freela {
+    border-color: var(--freela-accent);
+    background-color: color-mix(in srgb, var(--freela-accent) 16%, #111827);
   }
 
-  .gear-clt,
-  .gear-freela {
+  .gear-primary,
+  .gear-secondary {
     transform: rotate(0deg);
+    transform-origin: center;
   }
 
-  :global(html[data-mode="freela"]) .gear-clt {
-    transform: rotate(90deg);
+  :global(html[data-mode="freela"]) .gear-primary {
+    transform: rotate(60deg);
   }
 
-  :global(html[data-mode="freela"]) .gear-freela {
-    transform: rotate(-90deg);
+  :global(html[data-mode="freela"]) .gear-secondary {
+    transform: rotate(-75deg);
   }
 
   @keyframes fadeIn {

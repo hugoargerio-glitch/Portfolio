@@ -1,5 +1,137 @@
 ---
-import { profileEntries } from "../config";
+import { profileEntries, type ProfileMode } from "../config";
+import { getTechIconByKey, type TechIconKey } from "../utils/techIcons";
+import TechBadge from "./TechBadge.astro";
+import TerminalDemo from "./TerminalDemo.astro";
+
+interface FlowStage {
+  label: string;
+  detail: string;
+}
+
+interface StackCardDef {
+  iconKey: TechIconKey;
+  name: string;
+  role: string;
+}
+
+const PROJECT_STACK_CARDS: Record<string, Record<ProfileMode, StackCardDef[]>> = {
+  "comex-data-engine-v2": {
+    clt: [
+      { iconKey: "python", name: "Python 3.12", role: "Decimal anti-float & backoff Tenacity" },
+      { iconKey: "fastapi", name: "FastAPI", role: "API REST & fila de quarentena HITL" },
+      { iconKey: "postgresql", name: "PostgreSQL 16", role: "Partidas dobradas & triggers PL/pgSQL" },
+      { iconKey: "mongodb", name: "MongoDB 7", role: "Ingestão raw camt.053 & documentos" },
+      { iconKey: "duckdb", name: "DuckDB", role: "Queries analíticas sobre Parquet Hive" },
+      { iconKey: "docker", name: "Docker", role: "Stack tri-store isolado em Compose" },
+    ],
+    freela: [
+      { iconKey: "python", name: "Python 3.12", role: "Coleta automática BACEN PTAX & cálculos" },
+      { iconKey: "fastapi", name: "FastAPI", role: "Painel ágil para revisão de exceções" },
+      { iconKey: "postgresql", name: "PostgreSQL 16", role: "Livro-razão auditável centavo a centavo" },
+      { iconKey: "mongodb", name: "MongoDB 7", role: "Histórico bruto rastreável de faturas" },
+      { iconKey: "duckdb", name: "DuckDB", role: "Relatórios de Landed Cost instantâneos" },
+      { iconKey: "docker", name: "Docker", role: "Deploy enxuto em servidor único" },
+    ],
+  },
+  "MacroFlow-Lakehouse": {
+    clt: [
+      { iconKey: "airflow", name: "Apache Airflow", role: "DAGs diárias & controle de watermark" },
+      { iconKey: "pyspark", name: "PySpark", role: "Transformação distribuída StructType" },
+      { iconKey: "databricks", name: "Databricks", role: "Camadas Medallion & Delta MERGE" },
+      { iconKey: "snowflake", name: "Snowflake", role: "Star Schema Kimball com RBAC" },
+      { iconKey: "python", name: "Python 3.12", role: "Contratos Pydantic V2 & CQR LightGBM" },
+    ],
+    freela: [
+      { iconKey: "airflow", name: "Apache Airflow", role: "Atualização diária antes do expediente" },
+      { iconKey: "pyspark", name: "PySpark", role: "Limpeza rápida de séries financeiras" },
+      { iconKey: "databricks", name: "Databricks", role: "Base unificada sem registros duplicados" },
+      { iconKey: "snowflake", name: "Snowflake", role: "Tabelas otimizadas para Power BI" },
+      { iconKey: "python", name: "Python 3.12", role: "Projeções cambiais com 95% confiança" },
+    ],
+  },
+  "B2B-Price-Market-Monitor": {
+    clt: [
+      { iconKey: "python", name: "Python 3.12", role: "Edge CDC, Dual-Hash & Outbox retry" },
+      { iconKey: "sqlite", name: "SQLite 3 WAL", role: "B-Tree ~0,05 ms concorrente local" },
+      { iconKey: "docker", name: "Docker", role: "Container leve (~35 MB RAM)" },
+      { iconKey: "linux", name: "Linux", role: "Daemon nativo contínuo 24/7" },
+    ],
+    freela: [
+      { iconKey: "python", name: "Python 3.12", role: "Alertas limpos no Slack & Discord" },
+      { iconKey: "sqlite", name: "SQLite 3 WAL", role: "Zero custo de banco gerenciado" },
+      { iconKey: "docker", name: "Docker", role: "Instalação simples sem SaaS em dólar" },
+      { iconKey: "linux", name: "Linux", role: "Monitoramento estável 24/7 em VPS" },
+    ],
+  },
+};
+
+const PROJECT_FLOWS: Record<string, Record<ProfileMode, FlowStage[]>> = {
+  "comex-data-engine-v2": {
+    clt: [
+      { label: "Fontes", detail: "BACEN PTAX · MDIC · SWIFT camt.053" },
+      { label: "Validação / Contrato", detail: "ODCS v3.2.0 · Pydantic V2 Anti-Float" },
+      { label: "Engine / Storage", detail: "MongoDB 7 · PG16 ACID · HITL" },
+      { label: "Saída", detail: "Parquet Hive · DuckDB · FastAPI" },
+    ],
+    freela: [
+      { label: "Fontes", detail: "Faturas · Câmbio BACEN · Bancos" },
+      { label: "Guardião Anti-Erro", detail: "Trava Matemática & Quarentena" },
+      { label: "Livro Caixa", detail: "Cascata Fiscal + Partidas Dobradas" },
+      { label: "Saída", detail: "Landed Cost & Margem Auditada" },
+    ],
+  },
+  "MacroFlow-Lakehouse": {
+    clt: [
+      { label: "Fontes", detail: "BACEN SGS (Selic/IPCA) · YFinance" },
+      { label: "Validação / Contrato", detail: "Airflow Edge · Pydantic V2 · StructType" },
+      { label: "Engine / Storage", detail: "Databricks Medallion · Delta MERGE" },
+      { label: "Saída", detail: "Snowflake Kimball · LightGBM CQR" },
+    ],
+    freela: [
+      { label: "Fontes", detail: "Indicadores Oficiais & Cotações" },
+      { label: "Guardião", detail: "Checagem Automática na Entrada" },
+      { label: "Base Única", detail: "Atualização Diária Sem Duplicatas" },
+      { label: "Saída", detail: "Power BI Diário & Previsão Cambial" },
+    ],
+  },
+  "B2B-Price-Market-Monitor": {
+    clt: [
+      { label: "Fontes", detail: "Edge Collectors · HTTP / JSON" },
+      { label: "Validação / Contrato", detail: "ODCS v3.2.0 · DECIMAL · Circuit Breaker" },
+      { label: "Engine / Storage", detail: "Dual-Hash SHA-256 · SQLite WAL" },
+      { label: "Saída", detail: "Transactional Outbox · Discord / Slack" },
+    ],
+    freela: [
+      { label: "Fontes", detail: "Concorrentes, Estoques & Portais" },
+      { label: "Guardião", detail: "Filtro Anti-Ruído & Trava de Layout" },
+      { label: "Detector 24/7", detail: "Monitoramento (~35 MB RAM)" },
+      { label: "Saída", detail: "Alertas Limpos no Slack / Discord" },
+    ],
+  },
+};
+
+const PROJECT_INDEX_LABELS: Record<string, Record<ProfileMode, string>> = {
+  "comex-data-engine-v2": {
+    clt: "comex-data-engine-v2",
+    freela: "Comex Data Engine V2",
+  },
+  "MacroFlow-Lakehouse": {
+    clt: "MacroFlow-Lakehouse",
+    freela: "MacroFlow BI & Câmbio",
+  },
+  "B2B-Price-Market-Monitor": {
+    clt: "B2B-Price-Market-Monitor",
+    freela: "B2B Price Monitor",
+  },
+};
+
+const ARCHITECTURE_GUARANTEES = [
+  "ODCS v3.2.0",
+  "Zero-Float Decimal",
+  "Idempotent ACID",
+  "Docker + CI",
+] as const;
 
 const hasProjects = profileEntries.some(
   ({ config }) => config.projects.length > 0
@@ -11,108 +143,331 @@ const hasProjects = profileEntries.some(
     <section id="projects" class="p-8 sm:p-12 md:p-16 lg:p-24">
       <div>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-          <div class="lg:col-span-4">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900">
-              <span class="mode-clt">Projetos</span>
-              <span class="mode-freela">Cases &amp; Soluções</span>
-            </h2>
-            <div
-              class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
-              style="background-color: var(--accent-color)"
-            />
+          <div class="lg:col-span-4 lg:sticky lg:top-24 lg:self-start space-y-6">
+            <div>
+              <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-slate-100">
+                <span class="mode-clt">Projetos</span>
+                <span class="mode-freela">Cases &amp; Soluções</span>
+              </h2>
+              <div
+                class="w-[75px] h-[5px] mt-2 rounded-full transition-colors duration-300"
+                style="background-color: var(--accent-color)"
+              />
+            </div>
+
+            {/* Mini-índice clicável sincronizado com scroll */}
+            {profileEntries.map(({ mode, modeClass, config }) => (
+              <nav
+                aria-label="Índice dos projetos"
+                class={`${modeClass} hidden lg:block space-y-1.5`}
+              >
+                {config.projects.map((project, index) => (
+                  <a
+                    href={`#project-${mode}-${index}`}
+                    data-project-nav={`${mode}-${index}`}
+                    data-active={index === 0 ? "true" : "false"}
+                    class="project-nav-item flex items-center gap-2.5 px-3 py-2 rounded-lg border border-transparent text-xs font-mono text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-100 hover:bg-gray-100/70 dark:hover:bg-slate-800/50 transition-all duration-200"
+                  >
+                    <span class="project-nav-num font-bold shrink-0">
+                      0{index + 1}
+                    </span>
+                    <span class="truncate">
+                      {PROJECT_INDEX_LABELS[project.repo]?.[mode] ?? project.repo}
+                    </span>
+                  </a>
+                ))}
+              </nav>
+            ))}
+
+            {/* Card Garantias de Arquitetura */}
+            <div class="rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-4 space-y-3">
+              <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400">
+                Garantias de Arquitetura
+              </p>
+              <ul class="grid grid-cols-2 gap-2">
+                {ARCHITECTURE_GUARANTEES.map((item) => (
+                  <li class="flex items-center gap-1.5 rounded-lg border border-gray-200/80 dark:border-slate-800 bg-white dark:bg-[#0B0F17]/90 px-2.5 py-1.5 text-[11px] font-mono font-medium text-gray-700 dark:text-slate-300">
+                    <span
+                      class="h-1.5 w-1.5 rounded-full shrink-0"
+                      style="background-color: var(--accent-color)"
+                    />
+                    <span class="truncate">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div class="lg:col-span-8">
-            {profileEntries.map(({ modeClass, config }) => (
+            {profileEntries.map(({ mode, modeClass, config }) => (
               <div class={`${modeClass} space-y-8`}>
                 {config.projects.map((project, index) => {
-                  const Component = project.link ? "a" : "div";
-                  const linkProps = project.link
-                    ? {
-                        href: project.link,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                      }
-                    : {};
+                  const drawerId = `arch-drawer-${mode}-${index}`;
+                  const stages = PROJECT_FLOWS[project.repo]?.[mode] ?? [];
+                  const stackCards = PROJECT_STACK_CARDS[project.repo]?.[mode] ?? [];
 
                   return (
-                    <div class="group relative">
-                      <Component
-                        {...linkProps}
-                        class={`block relative p-4 sm:p-6 md:p-8 bg-gray-50 rounded-xl sm:rounded-2xl border border-gray-200 transition-all duration-300 ${
-                          project.link
-                            ? "hover:bg-white hover:shadow-xl hover:border-gray-300 hover:-translate-y-1"
-                            : ""
-                        }`}
-                      >
-                        {project.link && (
-                          <div class="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center bg-gray-900 rounded-full text-white transition-all duration-300 group-hover:bg-gray-700">
-                            <svg
-                              class="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M7 17L17 7M17 7H7M17 7V17"
-                              />
-                            </svg>
+                    <article
+                      id={`project-${mode}-${index}`}
+                      data-project-card={`${mode}-${index}`}
+                      data-open="false"
+                      class="arch-card scroll-mt-24 group relative p-4 sm:p-6 md:p-8 bg-gray-50 dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-slate-800 transition-all duration-300 hover:bg-white dark:hover:bg-[#111827] hover:shadow-xl hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60"
+                    >
+                      {project.link && (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Abrir repositório ${project.repo} no GitHub`}
+                          class="absolute top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center bg-gray-900 dark:bg-slate-800 rounded-full text-white dark:text-slate-100 dark:border dark:border-slate-700 transition-all duration-300 hover:bg-gray-700 dark:hover:bg-[var(--accent-color)] dark:hover:border-[var(--accent-color)]"
+                        >
+                          <svg
+                            class="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 transition-transform duration-300 hover:translate-x-0.5 hover:-translate-y-0.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M7 17L17 7M17 7H7M17 7V17"
+                            />
+                          </svg>
+                        </a>
+                      )}
+
+                      <div class="space-y-4">
+                        <div>
+                          <span
+                            class="text-sm font-mono transition-colors duration-300"
+                            style="color: var(--accent-color)"
+                          >
+                            0{index + 1} · {project.repo}
+                          </span>
+                          <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 mt-1 pr-12 sm:pr-14 md:pr-16">
+                            {project.link ? (
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="hover:underline underline-offset-4 decoration-2"
+                              >
+                                {project.name}
+                              </a>
+                            ) : (
+                              project.name
+                            )}
+                          </h3>
+                        </div>
+
+                        <p
+                          class={`text-base sm:text-lg text-gray-600 dark:text-slate-300 leading-relaxed ${project.link ? "pr-12 sm:pr-14 md:pr-16" : ""}`}
+                        >
+                          {project.description}
+                        </p>
+
+                        {project.highlights && project.highlights.length > 0 && (
+                          <ul class="space-y-2 pt-1">
+                            {project.highlights.map((highlight) => (
+                              <li class="flex items-start text-sm sm:text-base text-gray-600 dark:text-slate-300">
+                                <span
+                                  class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0 transition-colors duration-300"
+                                  style="background-color: var(--accent-color)"
+                                />
+                                <span>{highlight}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        {project.skills && project.skills.length > 0 && (
+                          <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
+                            {project.skills.map((skill) => (
+                              <TechBadge label={skill} variant="dark" />
+                            ))}
                           </div>
                         )}
 
-                        <div class="space-y-4">
-                          <div>
-                            <span
-                              class="text-sm font-mono transition-colors duration-300"
-                              style="color: var(--accent-color)"
+                        {stages.length > 0 && (
+                          <div class="pt-3 border-t border-gray-200/80 dark:border-slate-800">
+                            <button
+                              type="button"
+                              data-arch-toggle
+                              aria-expanded="false"
+                              aria-controls={drawerId}
+                              class="inline-flex items-center gap-2 text-xs sm:text-sm font-mono font-semibold text-gray-700 hover:text-gray-950 dark:text-slate-300 dark:hover:text-slate-100 cursor-pointer transition-colors"
                             >
-                              0{index + 1} · {project.repo}
-                            </span>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mt-1 pr-12 sm:pr-14 md:pr-16">
-                              {project.name}
-                            </h3>
-                          </div>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                                style="color: var(--accent-color)"
+                              >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M12 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M7 9h10" />
+                                <path d="M12 9v4" />
+                              </svg>
+                              <span>Ver Fluxo de Arquitetura &amp; Stack</span>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                                class="arch-chevron transition-transform duration-300"
+                              >
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M6 9l6 6l6 -6" />
+                              </svg>
+                            </button>
 
-                          <p
-                            class={`text-base sm:text-lg text-gray-600 leading-relaxed ${project.link ? "pr-12 sm:pr-14 md:pr-16" : ""}`}
-                          >
-                            {project.description}
-                          </p>
+                            <div id={drawerId} class="arch-drawer">
+                              <div class="overflow-hidden">
+                                <div class="pt-4">
+                                  <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] items-stretch gap-2">
+                                    {stages.map((stage, stageIdx) => (
+                                      <>
+                                        <div class="rounded-lg border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0B0F17]/90 p-3 flex flex-col justify-between transition-colors duration-300">
+                                          <span
+                                            class="text-[11px] font-mono font-semibold uppercase tracking-wide"
+                                            style="color: var(--accent-color)"
+                                          >
+                                            0{stageIdx + 1} · {stage.label}
+                                          </span>
+                                          <span class="mt-1 text-xs font-medium text-gray-800 dark:text-slate-200 leading-snug">
+                                            {stage.detail}
+                                          </span>
+                                        </div>
 
-                          {project.highlights && project.highlights.length > 0 && (
-                            <ul class="space-y-2 pt-1">
-                              {project.highlights.map((highlight) => (
-                                <li class="flex items-start text-sm sm:text-base text-gray-600">
-                                  <span
-                                    class="inline-block w-1.5 h-1.5 rounded-full mt-2 mr-3 shrink-0 transition-colors duration-300"
-                                    style="background-color: var(--accent-color)"
-                                  />
-                                  <span>{highlight}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                                        {stageIdx < stages.length - 1 && (
+                                          <div
+                                            aria-hidden="true"
+                                            class="flex items-center justify-center py-0.5 sm:py-0"
+                                          >
+                                            <svg
+                                              width="20"
+                                              height="18"
+                                              viewBox="0 0 20 18"
+                                              fill="none"
+                                              class="hidden sm:block"
+                                            >
+                                              <line
+                                                x1="0"
+                                                y1="9"
+                                                x2="15"
+                                                y2="9"
+                                                stroke="var(--accent-color)"
+                                                stroke-width="2"
+                                                stroke-dasharray="3 3"
+                                              />
+                                              <path
+                                                d="M12 5L17 9L12 13"
+                                                stroke="var(--accent-color)"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              />
+                                            </svg>
+                                            <svg
+                                              width="18"
+                                              height="18"
+                                              viewBox="0 0 18 18"
+                                              fill="none"
+                                              class="block sm:hidden"
+                                            >
+                                              <line
+                                                x1="9"
+                                                y1="0"
+                                                x2="9"
+                                                y2="13"
+                                                stroke="var(--accent-color)"
+                                                stroke-width="2"
+                                                stroke-dasharray="3 3"
+                                              />
+                                              <path
+                                                d="M5 10L9 15L13 10"
+                                                stroke="var(--accent-color)"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              />
+                                            </svg>
+                                          </div>
+                                        )}
+                                      </>
+                                    ))}
+                                  </div>
 
-                          {project.skills && project.skills.length > 0 && (
-                            <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
-                              {project.skills.map((skill) => (
-                                <span
-                                  class={`px-2.5 sm:px-3 py-1 sm:py-1.5 bg-gray-900 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${
-                                    project.link ? "group-hover:bg-gray-800" : ""
-                                  }`}
-                                >
-                                  {skill}
-                                </span>
-                              ))}
+                                  {stackCards.length > 0 && (
+                                    <div class="mt-4 pt-4 border-t border-gray-200/70 dark:border-slate-800/80">
+                                      <p class="text-[11px] font-mono font-semibold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-3">
+                                        Tecnologias do Pipeline
+                                      </p>
+                                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                                        {stackCards.map((tech, techIdx) => {
+                                          const icon = getTechIconByKey(tech.iconKey);
+                                          return (
+                                            <div
+                                              class="stack-pop-card rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0B0F17]/95 p-3 flex items-center gap-3 shadow-xs transition-colors duration-300 hover:border-[var(--accent-color)]/60"
+                                              style={`animation-delay: ${(techIdx + 1) * 50}ms;`}
+                                            >
+                                              <div class="shrink-0 w-12 h-12 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-100 dark:border-slate-800 flex items-center justify-center p-1">
+                                                <img
+                                                  src={icon.src}
+                                                  alt={tech.name}
+                                                  loading="lazy"
+                                                  decoding="async"
+                                                  class={`w-9 h-9 object-contain ${
+                                                    icon.invertOnDark
+                                                      ? "dark:invert dark:brightness-90"
+                                                      : ""
+                                                  } ${
+                                                    icon.badgeOnLight
+                                                      ? "rounded-full bg-gray-900 p-1 dark:bg-transparent dark:p-0"
+                                                      : ""
+                                                  }`.trim()}
+                                                />
+                                              </div>
+                                              <div class="min-w-0">
+                                                <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-slate-100 leading-tight truncate">
+                                                  {tech.name}
+                                                </p>
+                                                <p class="text-[11px] sm:text-xs text-gray-600 dark:text-slate-400 leading-snug mt-0.5">
+                                                  {tech.role}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  <TerminalDemo repo={project.repo} />
+                                </div>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </Component>
-                    </div>
+                          </div>
+                        )}
+                      </div>
+                    </article>
                   );
                 })}
               </div>
@@ -123,3 +478,172 @@ const hasProjects = profileEntries.some(
     </section>
   )
 }
+
+<script>
+  const projectCards = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-project-card]")
+  );
+
+  const setCardOpen = (card: HTMLElement, open: boolean) => {
+    const next = String(open);
+    card.setAttribute("data-open", next);
+    card
+      .querySelector("[data-arch-toggle]")
+      ?.setAttribute("aria-expanded", next);
+    if (open) {
+      card.querySelectorAll("[data-terminal-demo]").forEach((term) => {
+        term.dispatchEvent(new CustomEvent("cli:start"));
+      });
+    }
+  };
+
+  let autoOpenObserver: IntersectionObserver | null = null;
+
+  if ("IntersectionObserver" in window && projectCards.length > 0) {
+    autoOpenObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.35) return;
+          const card = entry.target as HTMLElement;
+          if (card.offsetParent === null) return;
+
+          if (card.getAttribute("data-auto-opened") === "true") {
+            autoOpenObserver?.unobserve(card);
+            return;
+          }
+
+          card.setAttribute("data-auto-opened", "true");
+          autoOpenObserver?.unobserve(card);
+          if (card.getAttribute("data-open") !== "true") {
+            setCardOpen(card, true);
+          }
+        });
+      },
+      { threshold: 0.35 }
+    );
+
+    projectCards.forEach((card) => autoOpenObserver?.observe(card));
+  }
+
+  document.querySelectorAll("[data-arch-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const card = btn.closest<HTMLElement>(".arch-card");
+      if (!card) return;
+      const isOpen = card.getAttribute("data-open") === "true";
+      card.setAttribute("data-auto-opened", "true");
+      autoOpenObserver?.unobserve(card);
+      setCardOpen(card, !isOpen);
+    });
+  });
+
+  // Destaca item ativo no mini-índice lateral conforme scroll
+  const navItems = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-project-nav]")
+  );
+
+  const setActiveNav = (key: string) => {
+    navItems.forEach((item) => {
+      item.setAttribute(
+        "data-active",
+        String(item.getAttribute("data-project-nav") === key)
+      );
+    });
+  };
+
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const key = item.getAttribute("data-project-nav");
+      if (key) setActiveNav(key);
+    });
+  });
+
+  if ("IntersectionObserver" in window && projectCards.length > 0) {
+    const visibleRatios = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const key = entry.target.getAttribute("data-project-card");
+          if (!key) return;
+          visibleRatios.set(key, entry.isIntersecting ? entry.intersectionRatio : 0);
+        });
+
+        let bestKey: string | null = null;
+        let bestRatio = 0;
+        for (const card of projectCards) {
+          if (card.offsetParent === null) continue;
+          const key = card.getAttribute("data-project-card");
+          if (!key) continue;
+          const ratio = visibleRatios.get(key) ?? 0;
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestKey = key;
+          }
+        }
+        if (bestKey) setActiveNav(bestKey);
+      },
+      { rootMargin: "-20% 0px -45% 0px", threshold: [0.1, 0.3, 0.6] }
+    );
+
+    projectCards.forEach((card) => observer.observe(card));
+  }
+</script>
+
+<style>
+  .project-nav-item[data-active="true"] {
+    border-color: color-mix(in srgb, var(--accent-color) 45%, transparent);
+    background-color: color-mix(in srgb, var(--accent-color) 8%, transparent);
+    color: rgb(17 24 39);
+  }
+
+  :global(html.dark) .project-nav-item[data-active="true"] {
+    color: rgb(241 245 249);
+  }
+
+  .project-nav-item[data-active="true"] .project-nav-num {
+    color: var(--accent-color);
+  }
+  .arch-drawer {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: all 300ms ease;
+  }
+
+  .arch-card[data-open="true"] .arch-drawer {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .arch-card[data-open="true"] .arch-chevron {
+    transform: rotate(180deg);
+  }
+
+  .stack-pop-card {
+    opacity: 0;
+    transform: translateY(14px) scale(0.84);
+  }
+
+  .arch-card[data-open="true"] .stack-pop-card {
+    animation: popFlyIn 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes popFlyIn {
+    0% {
+      opacity: 0;
+      transform: translateY(14px) scale(0.84);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stack-pop-card,
+    .arch-card[data-open="true"] .stack-pop-card {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
