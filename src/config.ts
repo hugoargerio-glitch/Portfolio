@@ -78,7 +78,13 @@ export interface SiteConfig {
   packages?: ServicePackage[];
 }
 
-const RESUME_URL = "/Hugo_Campos_Resume_DE.pdf";
+export function withBase(path: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const normalizedPath = path.replace(/^\//, "");
+  return `${base}/${normalizedPath}`;
+}
+
+const RESUME_URL = withBase("Hugo_Campos_Resume_DE.pdf");
 const WHATSAPP_URL = "https://wa.me/5516994100473";
 const WHATSAPP_DIAGNOSTIC_URL =
   `${WHATSAPP_URL}?text=Ol%C3%A1%20Hugo%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20solicitar%20um%20diagn%C3%B3stico%20t%C3%A9cnico%20de%2015%20minutos.`;
