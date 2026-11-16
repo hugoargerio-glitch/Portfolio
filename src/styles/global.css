@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  --accent-color: var(--clt-accent, #1d4ed8);
+}
+
+html[data-mode="freela"] {
+  --accent-color: var(--freela-accent, #0f766e);
+}
+
+body {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+html:not([data-mode="freela"]) .mode-freela {
+  display: none;
+}
+
+html[data-mode="freela"] .mode-clt {
+  display: none;
+}
