@@ -1,0 +1,214 @@
+<canvas
+  id="dot-bg"
+  aria-hidden="true"
+  class="fixed inset-0 -z-10 pointer-events-none"
+></canvas>
+
+<script>
+  (() => {
+    const canvas = document.getElementById("dot-bg") as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const SPACING = 28;
+    const BASE_RADIUS = 1.1;
+    const MAX_RADIUS = 2.6;
+    const INFLUENCE_RADIUS = 130;
+    const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
+    const TWO_PI = Math.PI * 2;
+
+    let width = 0;
+    let height = 0;
+    let cols = 0;
+    let rows = 0;
+    let offsetX = 0;
+    let offsetY = 0;
+    let boosts = new Float32Array(0);
+
+    let pointerX = -9999;
+    let pointerY = -9999;
+    let pointerActive = false;
+    let rafId: number | null = null;
+    let lastMoveTime = 0;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const getPalette = () => {
+      const root = document.documentElement;
+      const isDark = root.classList.contains("dark");
+      const isFreela = root.dataset.mode === "freela";
+
+      const baseRgb = isDark ? [148, 163, 184] : [100, 116, 139];
+      const baseAlpha = isDark ? 0.16 : 0.18;
+      const accentRgb = isFreela ? [20, 184, 166] : [59, 130, 246];
+      const baseStyle = isDark
+        ? "rgba(148, 163, 184, 0.16)"
+        : "rgba(100, 116, 139, 0.18)";
+
+      return { baseRgb, baseAlpha, accentRgb, baseStyle };
+    };
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.ceil(width / SPACING) + 1;
+      rows = Math.ceil(height / SPACING) + 1;
+      offsetX = (width - (cols - 1) * SPACING) * 0.5;
+      offsetY = (height - (rows - 1) * SPACING) * 0.5;
+      boosts = new Float32Array(cols * rows);
+      renderStatic();
+    };
+
+    const renderStatic = () => {
+      const { baseStyle } = getPalette();
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = baseStyle;
+      ctx.beginPath();
+      for (let r = 0; r < rows; r++) {
+        const y = offsetY + r * SPACING;
+        for (let c = 0; c < cols; c++) {
+          const x = offsetX + c * SPACING;
+          ctx.moveTo(x + BASE_RADIUS, y);
+          ctx.arc(x, y, BASE_RADIUS, 0, TWO_PI);
+        }
+      }
+      ctx.fill();
+    };
+
+    const step = () => {
+      rafId = null;
+      if (reducedMotionQuery.matches) {
+        renderStatic();
+        return;
+      }
+
+      const now = performance.now();
+      const pointerSettled = !pointerActive || now - lastMoveTime > 120;
+      const { baseRgb, baseAlpha, accentRgb, baseStyle } = getPalette();
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = baseStyle;
+      ctx.beginPath();
+
+      let maxDelta = 0;
+      let anyHighlighted = false;
+      const highlighted: Array<{ x: number; y: number; b: number }> = [];
+
+      for (let r = 0; r < rows; r++) {
+        const y = offsetY + r * SPACING;
+        const dy = y - pointerY;
+        const dySq = dy * dy;
+        const rowOffset = r * cols;
+
+        for (let c = 0; c < cols; c++) {
+          const idx = rowOffset + c;
+          const x = offsetX + c * SPACING;
+          let target = 0;
+
+          if (pointerActive && dySq < INFLUENCE_SQ) {
+            const dx = x - pointerX;
+            const dSq = dx * dx + dySq;
+            if (dSq < INFLUENCE_SQ) {
+              const norm = 1 - Math.sqrt(dSq) / INFLUENCE_RADIUS;
+              target = norm * norm * (3 - 2 * norm);
+            }
+          }
+
+          const current = boosts[idx];
+          const next = current + (target - current) * 0.22;
+          const diff = Math.abs(target - next);
+          if (diff > maxDelta) maxDelta = diff;
+
+          if (next > 0.004) {
+            boosts[idx] = next;
+            anyHighlighted = true;
+            highlighted.push({ x, y, b: next });
+          } else {
+            boosts[idx] = 0;
+            ctx.moveTo(x + BASE_RADIUS, y);
+            ctx.arc(x, y, BASE_RADIUS, 0, TWO_PI);
+          }
+        }
+      }
+
+      ctx.fill();
+
+      for (let i = 0; i < highlighted.length; i++) {
+        const { x, y, b } = highlighted[i];
+        const radius = BASE_RADIUS + (MAX_RADIUS - BASE_RADIUS) * b;
+        const red = Math.round(baseRgb[0] + (accentRgb[0] - baseRgb[0]) * b);
+        const green = Math.round(baseRgb[1] + (accentRgb[1] - baseRgb[1]) * b);
+        const blue = Math.round(baseRgb[2] + (accentRgb[2] - baseRgb[2]) * b);
+        const alpha = (baseAlpha + (0.72 - baseAlpha) * b).toFixed(3);
+
+        ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, TWO_PI);
+        ctx.fill();
+      }
+
+      if (!pointerSettled || maxDelta > 0.003 || (!pointerActive && anyHighlighted)) {
+        rafId = requestAnimationFrame(step);
+      }
+    };
+
+    const scheduleFrame = () => {
+      if (reducedMotionQuery.matches) {
+        renderStatic();
+        return;
+      }
+      if (rafId === null) {
+        rafId = requestAnimationFrame(step);
+      }
+    };
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        pointerX = e.clientX;
+        pointerY = e.clientY;
+        pointerActive = true;
+        lastMoveTime = performance.now();
+        scheduleFrame();
+      },
+      { passive: true }
+    );
+
+    document.addEventListener("mouseleave", () => {
+      pointerActive = false;
+      scheduleFrame();
+    });
+
+    window.addEventListener("blur", () => {
+      pointerActive = false;
+      scheduleFrame();
+    });
+
+    window.addEventListener("resize", resize, { passive: true });
+    reducedMotionQuery.addEventListener("change", () => {
+      boosts.fill(0);
+      renderStatic();
+    });
+
+    const observer = new MutationObserver(() => {
+      if (rafId === null) {
+        if (pointerActive) scheduleFrame();
+        else renderStatic();
+      }
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-mode"],
+    });
+
+    resize();
+  })();
+</script>

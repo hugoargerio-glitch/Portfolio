@@ -8,6 +8,7 @@ import Experience from "../components/Experience.astro";
 import Education from "../components/Education.astro";
 import CertificationsSection from "../components/CertificationsSection.astro";
 import Footer from "../components/Footer.astro";
+import InteractiveDotBackground from "../components/InteractiveDotBackground.astro";
 import { cltConfig, freelaConfig, siteConfig, withBase } from "../config";
 import "../styles/global.css";
 ---
@@ -23,8 +24,14 @@ import "../styles/global.css";
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={siteConfig.description} />
     <script is:inline>
+      const root = document.documentElement;
       const modo = new URLSearchParams(window.location.search).get("modo");
-      document.documentElement.dataset.mode = modo === "freela" ? "freela" : "clt";
+      root.dataset.mode = modo === "freela" ? "freela" : "clt";
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+        root.classList.add("dark");
+      }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +41,8 @@ import "../styles/global.css";
     />
     <title>{siteConfig.name} - {siteConfig.title}</title>
   </head>
-  <body>
+  <body class="bg-white text-gray-900 dark:bg-[#0B0F17] dark:text-slate-100 transition-colors duration-300 antialiased">
+    <InteractiveDotBackground />
     <Header />
     <main>
       <Hero />

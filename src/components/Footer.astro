@@ -2,20 +2,20 @@
 import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
 ---
 
-<footer class="relative bg-gray-50 border-t border-gray-200">
+<footer class="relative bg-gray-50/75 dark:bg-[#0B0F17]/75 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
   <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8">
     <div
       class="flex flex-col md:flex-row md:items-start md:justify-between gap-8"
     >
       <div class="flex flex-col gap-4">
         <div>
-          <h3 class="text-2xl font-bold text-gray-800">
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-slate-100">
             {siteConfig.name}
           </h3>
-          <p class="mode-clt text-base text-gray-600 mt-1">
+          <p class="mode-clt text-base text-gray-600 dark:text-slate-300 mt-1">
             {cltConfig.title}
           </p>
-          <p class="mode-freela text-base text-gray-600 mt-1">
+          <p class="mode-freela text-base text-gray-600 dark:text-slate-300 mt-1">
             {freelaConfig.title}
           </p>
         </div>
@@ -80,7 +80,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
               freelaConfig.cta.secondaryLabel && (
                 <a
                   href={freelaConfig.cta.secondaryHref}
-                  class="mode-freela inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-colors"
+                  class="mode-freela inline-flex items-center px-4 py-2.5 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-[#111827]/90 text-sm font-medium text-gray-700 dark:text-slate-200 hover:border-gray-400 dark:hover:border-[var(--accent-color)] hover:text-gray-900 dark:hover:text-slate-100 transition-colors"
                 >
                   {freelaConfig.cta.secondaryLabel}
                 </a>
@@ -94,7 +94,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
               <a
                 href={`mailto:${siteConfig.social.email}`}
                 aria-label="Email"
-                class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+                class="text-gray-600 dark:text-slate-400 transition-colors duration-300 hover:text-[var(--accent-color)]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+                class="text-gray-600 dark:text-slate-400 transition-colors duration-300 hover:text-[var(--accent-color)]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +153,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+                class="text-gray-600 dark:text-slate-400 transition-colors duration-300 hover:text-[var(--accent-color)]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
-                class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+                class="text-gray-600 dark:text-slate-400 transition-colors duration-300 hover:text-[var(--accent-color)]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +209,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+                class="text-gray-600 dark:text-slate-400 transition-colors duration-300 hover:text-[var(--accent-color)]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -233,12 +233,15 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
       </div>
 
       <div class="flex flex-col md:items-end gap-4">
-        <nav aria-label="Navegação do rodapé" class="hidden md:flex gap-x-8">
+        <nav
+          aria-label="Navegação do rodapé"
+          class="hidden md:flex flex-wrap justify-end gap-x-5 lg:gap-x-7 gap-y-2"
+        >
           {
             navItems.map((item) => (
               <a
                 href={item.href}
-                class={`${item.modeClass ?? ""} text-sm text-gray-600 hover:text-gray-800 transition-colors`.trim()}
+                class={`${item.modeClass ?? ""} whitespace-nowrap text-sm text-gray-600 hover:text-gray-800 dark:text-slate-400 dark:hover:text-slate-100 transition-colors`.trim()}
               >
                 {item.label}
               </a>
@@ -252,14 +255,14 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
               href={freelaConfig.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="mode-freela text-xs text-gray-500 underline underline-offset-4 hover:text-gray-800 transition-colors"
+              class="mode-freela text-xs text-gray-500 dark:text-slate-400 underline underline-offset-4 hover:text-gray-800 dark:hover:text-slate-200 transition-colors"
             >
               Currículo técnico (PDF)
             </a>
           )
         }
 
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-gray-500 dark:text-slate-400">
           © {new Date().getFullYear()} {siteConfig.name}. Todos os direitos
           reservados.
         </p>
@@ -271,7 +274,7 @@ import { cltConfig, freelaConfig, navItems, siteConfig } from "../config";
   <div class="absolute inset-0 -z-10 overflow-hidden">
     <svg
       aria-hidden="true"
-      class="absolute bottom-0 left-0 w-full h-24 text-gray-100"
+      class="absolute bottom-0 left-0 w-full h-24 text-gray-100 dark:text-slate-800/60"
     >
       <pattern
         id="footer-pattern"

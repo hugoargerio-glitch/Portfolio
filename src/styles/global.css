@@ -1,12 +1,25 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
   --accent-color: var(--clt-accent, #1d4ed8);
 }
 
 html[data-mode="freela"] {
   --accent-color: var(--freela-accent, #0f766e);
+}
+
+html.dark {
+  color-scheme: dark;
+  --clt-accent: #3b82f6;
+  --freela-accent: #14b8a6;
+  --accent-color: #3b82f6;
+}
+
+html.dark[data-mode="freela"] {
+  --accent-color: #14b8a6;
 }
 
 body {
