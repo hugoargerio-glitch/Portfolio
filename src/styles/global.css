@@ -33,3 +33,11 @@ html:not([data-mode="freela"]) .mode-freela {
 html[data-mode="freela"] .mode-clt {
   display: none;
 }
+
+html:not([data-lang="en"]) .lang-en {
+  display: none;
+}
+
+html[data-lang="en"] .lang-pt {
+  display: none;
+}

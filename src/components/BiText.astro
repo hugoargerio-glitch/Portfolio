@@ -1,0 +1,11 @@
+---
+interface Props {
+  pt: string;
+  en: string;
+  class?: string;
+}
+
+const { pt, en, class: className } = Astro.props;
+---
+
+<span class:list={["lang-pt", className]}>{pt}</span><span class:list={["lang-en", className]}>{en}</span>

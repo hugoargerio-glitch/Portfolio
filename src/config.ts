@@ -116,25 +116,25 @@ export function withBase(path: string): string {
   return `${base}/${normalizedPath}`;
 }
 
-const RESUME_URL = withBase("Hugo_Campos_Resume_DE.pdf");
-const WHATSAPP_URL = "https://wa.me/5516994100473";
+export const RESUME_URL = withBase("Hugo_Campos_Resume_DE.pdf");
+export const WHATSAPP_URL = "https://wa.me/5516994100473";
 const WHATSAPP_DIAGNOSTIC_URL =
   `${WHATSAPP_URL}?text=Ol%C3%A1%20Hugo%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20solicitar%20um%20diagn%C3%B3stico%20t%C3%A9cnico%20de%2015%20minutos.`;
 
-const SHARED_IDENTITY = {
+export const SHARED_IDENTITY = {
   name: "Hugo Argeri Campos",
 } as const;
 
-const SHARED_SOCIAL: SocialLinks = {
+export const SHARED_SOCIAL: SocialLinks = {
   email: "hugoargerio@gmail.com",
   linkedin: "https://linkedin.com/in/hugo-campos-b2a678273",
   github: "https://github.com/hugoargerio-glitch",
   whatsapp: WHATSAPP_URL,
 };
 
-const CERTIFICATION_ISSUER = "Coursera • Credly Verified";
-const DE_VERIFY_URL = "https://coursera.org/verify/professional-cert/F9UH4EHNP12E";
-const DA_VERIFY_URL = "https://coursera.org/verify/professional-cert/QELOOTV7YY0H";
+export const CERTIFICATION_ISSUER = "Coursera • Credly Verified";
+export const DE_VERIFY_URL = "https://coursera.org/verify/professional-cert/F9UH4EHNP12E";
+export const DA_VERIFY_URL = "https://coursera.org/verify/professional-cert/QELOOTV7YY0H";
 
 const CLT_CERTIFICATIONS: CertificationItem[] = [
   {
@@ -290,7 +290,7 @@ const FREELA_CERTIFICATIONS: CertificationItem[] = [
   },
 ];
 
-const REPO_URLS = {
+export const REPO_URLS = {
   comex: "https://github.com/hugoargerio-glitch/comex-data-engine-v2",
   macroflow: "https://github.com/hugoargerio-glitch/MacroFlow-Lakehouse",
   monitor: "https://github.com/hugoargerio-glitch/B2B-Price-Market-Monitor",
@@ -769,6 +769,7 @@ export const siteConfig: SiteConfig = cltConfig;
 export interface NavItem {
   href: string;
   label: string;
+  labelEn: string;
   modeClass?: "mode-clt" | "mode-freela";
 }
 
@@ -778,27 +779,28 @@ export const profileEntries = [
 ] as const;
 
 export const navItems: NavItem[] = [
-  { href: "#about", label: "Sobre" },
+  { href: "#about", label: "Sobre", labelEn: "About" },
   ...(cltConfig.projects.length > 0 || freelaConfig.projects.length > 0
-    ? [{ href: "#projects", label: "Projetos" }]
+    ? [{ href: "#projects", label: "Projetos", labelEn: "Projects" }]
     : []),
   ...((freelaConfig.packages?.length ?? 0) > 0
     ? [
         {
           href: "#packages",
           label: "Pacotes B2B",
+          labelEn: "B2B Packages",
           modeClass: "mode-freela" as const,
         },
       ]
     : []),
   ...(cltConfig.experience.length > 0 || freelaConfig.experience.length > 0
-    ? [{ href: "#experience", label: "Experiência" }]
+    ? [{ href: "#experience", label: "Experiência", labelEn: "Experience" }]
     : []),
   ...(cltConfig.education.length > 0 || freelaConfig.education.length > 0
-    ? [{ href: "#education", label: "Formação" }]
+    ? [{ href: "#education", label: "Formação", labelEn: "Education" }]
     : []),
   ...(cltConfig.certifications.length > 0 ||
   freelaConfig.certifications.length > 0
-    ? [{ href: "#certifications", label: "Certificações" }]
+    ? [{ href: "#certifications", label: "Certificações", labelEn: "Certifications" }]
     : []),
 ];
