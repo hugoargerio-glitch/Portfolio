@@ -1,64 +1,24 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guia de referência para manutenção deste repositório.
 
-## Project Overview
+## Visão Geral
 
-This is a modern, minimalist portfolio template built with Astro and Tailwind CSS v4. It's designed to be easily customizable through a single configuration file while maintaining a clean, professional appearance.
+Portfólio estático dual-mode construído com **Astro 5**, **Tailwind CSS v4** (`@tailwindcss/vite`) e **TypeScript estrito**, publicado em GitHub Pages (`site: https://hugoargerio-glitch.github.io`, `base: "/portfolio"`).
 
-## Tech Stack
-
-- **Astro**: Static site generator
-- **Tailwind CSS v4**: Utility-first CSS framework using the new @tailwindcss/vite plugin
-- **TypeScript**: For type-safe configuration
-- **Tabler Icons**: Icon library
-
-## Development Commands
+## Comandos Principais
 
 ```bash
-npm run dev       # Start development server
-npm run build     # Build for production
-npm run preview   # Preview production build
+npm run dev       # Servidor de desenvolvimento
+npm run check     # astro sync + tsc --noEmit
+npm run build     # Build estático para ./dist/
+npm run preview   # Preview local da pasta dist/
 ```
 
-## Architecture
+## Arquitetura Dual-Mode (`clt` vs `freela`)
 
-The project follows a component-based architecture with all customization centralized in `src/config.ts`:
-
-- **Components** (`src/components/`): Individual Astro components for each section (Hero, About, Projects, Experience, Education, Header, Footer)
-- **Main Layout** (`src/pages/index.astro`): Single-page layout that imports all components
-- **Configuration** (`src/config.ts`): Single source of truth for all content and customization
-
-### Key Architectural Decisions
-
-1. **Single Configuration File**: All content is managed through `src/config.ts` to make customization simple
-2. **Conditional Rendering**: Sections automatically hide if their data is removed from the config
-3. **Component Independence**: Each section is a self-contained component that reads from the config
-4. **Accent Color System**: Single `accentColor` in config propagates throughout the site via CSS custom properties
-
-## Important Implementation Details
-
-- The site uses Tailwind CSS v4 with the Vite plugin configuration
-- No linting or testing framework is currently configured
-- All components are in `.astro` format (not React/Vue/etc)
-- The project uses IBM Plex Mono font loaded from Google Fonts
-- Social links in the config are all optional and will conditionally render
-
-## Working with Components
-
-When modifying components:
-1. Components read directly from the imported `siteConfig` object
-2. Use Tailwind utility classes for styling
-3. Maintain the existing monospace font aesthetic
-4. Use Tabler Icons for consistency with existing icons
-
-## Configuration Structure
-
-The `src/config.ts` exports a `siteConfig` object with these sections:
-- Basic info: name, title, description, accentColor
-- Social links: email, linkedin, twitter, github (all optional)
-- aboutMe: string
-- skills: string[]
-- projects: array of {name, description, link, skills}
-- experience: array of {company, title, dateRange, bullets}
-- education: array of {school, degree, dateRange, achievements}
+- **Configuração central ([`src/config.ts`](src/config.ts)):** Exporta `cltConfig`, `freelaConfig`, `profileEntries`, `navItems`, `withBase()` e `siteConfig` (alias de compatibilidade).
+- **Prevenção de FOUC ([`src/pages/index.astro`](src/pages/index.astro)):** `<script is:inline>` no `<head>` lê `?modo=` da URL (`freela` ou padrão `clt`) e define `document.documentElement.dataset.mode` antes da primeira pintura.
+- **Tema e visibilidade ([`src/styles/global.css`](src/styles/global.css)):** `--accent-color` alterna entre `--clt-accent` (`#1d4ed8`) e `--freela-accent` (`#0f766e`), e `.mode-clt` / `.mode-freela` controlam a exibição das variantes sem JavaScript por seção.
+- **Seletor de modo ([`src/components/Hero.astro`](src/components/Hero.astro)):** Duas engrenagens interativas atualizam `document.documentElement.dataset.mode`, `aria-pressed` e `?modo=` via `window.history.replaceState`.
+- **Caminhos com `BASE_URL`:** Assets em `public/` (`favicon.svg`, `Hugo_Campos_Resume_DE.pdf`) devem usar `withBase(...)` de `src/config.ts` para funcionar sob `/portfolio/`.
