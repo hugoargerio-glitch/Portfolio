@@ -10,11 +10,36 @@ import CertificationsSection from "../components/CertificationsSection.astro";
 import Footer from "../components/Footer.astro";
 import InteractiveDotBackground from "../components/InteractiveDotBackground.astro";
 import { cltConfig, freelaConfig, siteConfig, withBase } from "../config";
+import { cltConfigEn, freelaConfigEn } from "../i18n/configs";
 import "../styles/global.css";
+
+const metaByModeAndLang = {
+  clt: {
+    pt: {
+      title: `${cltConfig.name} - ${cltConfig.title}`,
+      description: cltConfig.description,
+    },
+    en: {
+      title: `${cltConfigEn.name} - ${cltConfigEn.title}`,
+      description: cltConfigEn.description,
+    },
+  },
+  freela: {
+    pt: {
+      title: `${freelaConfig.name} - ${freelaConfig.title}`,
+      description: freelaConfig.description,
+    },
+    en: {
+      title: `${freelaConfigEn.name} - ${freelaConfigEn.title}`,
+      description: freelaConfigEn.description,
+    },
+  },
+};
 ---
 
 <html
   lang="pt-BR"
+  data-lang="pt"
   style={`--clt-accent: ${cltConfig.accentColor}; --freela-accent: ${freelaConfig.accentColor};`}
 >
   <head>
@@ -23,15 +48,139 @@ import "../styles/global.css";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={siteConfig.description} />
-    <script is:inline>
-      const root = document.documentElement;
-      const modo = new URLSearchParams(window.location.search).get("modo");
-      root.dataset.mode = modo === "freela" ? "freela" : "clt";
-      const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-        root.classList.add("dark");
-      }
+    <script is:inline define:vars={{ metaByModeAndLang }}>
+      (() => {
+        const root = document.documentElement;
+        const params = new URLSearchParams(window.location.search);
+        const modo = params.get("modo");
+        root.dataset.mode = modo === "freela" ? "freela" : "clt";
+
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+          root.classList.add("dark");
+        }
+
+        const BRAZIL_TZ = new Set([
+          "America/Sao_Paulo",
+          "America/Fortaleza",
+          "America/Recife",
+          "America/Bahia",
+          "America/Belem",
+          "America/Maceio",
+          "America/Manaus",
+          "America/Porto_Velho",
+          "America/Boa_Vista",
+          "America/Cuiaba",
+          "America/Campo_Grande",
+          "America/Rio_Branco",
+          "America/Santarem",
+          "America/Araguaina",
+          "America/Noronha",
+          "America/Eirunepe",
+          "Brazil/East",
+          "Brazil/West",
+          "Brazil/Acre",
+          "Brazil/DeNoronha",
+        ]);
+
+        const normalizeLang = (val) => (val === "en" ? "en" : "pt");
+
+        const syncMeta = () => {
+          const mode = root.dataset.mode === "freela" ? "freela" : "clt";
+          const lang = root.dataset.lang === "en" ? "en" : "pt";
+          const entry = metaByModeAndLang?.[mode]?.[lang];
+          if (!entry) return;
+          document.title = entry.title;
+          const descMeta = document.querySelector('meta[name="description"]');
+          if (descMeta) descMeta.setAttribute("content", entry.description);
+        };
+
+        const setPortfolioLang = (nextLang, persistManual) => {
+          const normalized = normalizeLang(nextLang);
+          root.dataset.lang = normalized;
+          root.lang = normalized === "en" ? "en" : "pt-BR";
+          if (persistManual) {
+            localStorage.setItem("portfolio_lang", normalized);
+          }
+          syncMeta();
+          window.dispatchEvent(
+            new CustomEvent("portfolio:langchange", { detail: { lang: normalized } })
+          );
+        };
+
+        window.__setPortfolioLang = setPortfolioLang;
+        window.__syncPortfolioMeta = syncMeta;
+
+        const urlLangRaw = params.get("lang")?.toLowerCase();
+        const urlLang = urlLangRaw === "en" || urlLangRaw === "pt" ? urlLangRaw : null;
+        const storedLangRaw = localStorage.getItem("portfolio_lang");
+        const storedLang =
+          storedLangRaw === "en" || storedLangRaw === "pt" ? storedLangRaw : null;
+        const cachedGeoRaw = sessionStorage.getItem("portfolio_geo_lang");
+        const cachedGeo =
+          cachedGeoRaw === "en" || cachedGeoRaw === "pt" ? cachedGeoRaw : null;
+
+        const detectSyncFallback = () => {
+          try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (tz && BRAZIL_TZ.has(tz)) return "pt";
+          } catch {}
+          const navLang = (navigator.language || "").toLowerCase();
+          if (navLang.startsWith("pt")) return "pt";
+          return "en";
+        };
+
+        const initialLang =
+          urlLang ?? storedLang ?? cachedGeo ?? detectSyncFallback();
+        root.dataset.lang = initialLang;
+        root.lang = initialLang === "en" ? "en" : "pt-BR";
+        syncMeta();
+
+        if (!urlLang && !storedLang) {
+          const fetchCountryWithTimeout = async (url, extractor) => {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 1500);
+            try {
+              const res = await fetch(url, {
+                signal: controller.signal,
+                headers: { Accept: "application/json" },
+              });
+              if (!res.ok) return null;
+              const data = await res.json();
+              const code = extractor(data);
+              return typeof code === "string" && code.length === 2
+                ? code.toUpperCase()
+                : null;
+            } catch {
+              return null;
+            } finally {
+              clearTimeout(timer);
+            }
+          };
+
+          (async () => {
+            let country = await fetchCountryWithTimeout(
+              "https://api.country.is/",
+              (d) => d?.country
+            );
+            if (!country) {
+              country = await fetchCountryWithTimeout(
+                "https://ipwho.is/",
+                (d) => (d?.success !== false ? d?.country_code : null)
+              );
+            }
+            if (!country) return;
+            // Respect manual selection if user clicked toggle while request was in flight
+            if (localStorage.getItem("portfolio_lang")) return;
+            const geoLang = country === "BR" ? "pt" : "en";
+            sessionStorage.setItem("portfolio_geo_lang", geoLang);
+            if (root.dataset.lang !== geoLang) {
+              setPortfolioLang(geoLang, false);
+            }
+          })();
+        }
+      })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
