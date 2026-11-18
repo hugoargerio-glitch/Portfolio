@@ -646,7 +646,7 @@ export const freelaConfig: SiteConfig = {
     {
       id: "spreadsheets-to-sql",
       name: "Pacote 03: Migração Planilhas Excel / Google Sheets → PostgreSQL (SSOT)",
-      sla: "7 a 12 dias úteis",
+      sla: "4 a 7 dias úteis",
       painSolved:
         "Resolve travamentos em planilhas gigantes, fórmulas quebradas e dados divergentes entre equipes criando uma Fonte Única da Verdade.",
       deliverables: [
@@ -659,7 +659,7 @@ export const freelaConfig: SiteConfig = {
     {
       id: "comex-financial-hub",
       name: "Pacote 04: Comex & Financial Intelligence Data Hub",
-      sla: "7 a 10 dias úteis",
+      sla: "5 a 7 dias úteis",
       painSolved:
         "Automatiza o cruzamento semanal entre dados do Comex Stat (MDIC/NCM), câmbio oficial PTAX (BACEN) e embarques internos para apuração de margem e Landed Cost.",
       deliverables: [

@@ -475,7 +475,7 @@ export const freelaConfigEn: SiteConfig = {
     {
       id: "spreadsheets-to-sql",
       name: "Package 03: Excel / Google Sheets → PostgreSQL Migration (SSOT)",
-      sla: "7 to 12 business days",
+      sla: "4 to 7 business days",
       painSolved:
         "Fixes freezing spreadsheets, broken formulas, and conflicting team numbers by establishing a single database source of truth.",
       deliverables: [
@@ -488,7 +488,7 @@ export const freelaConfigEn: SiteConfig = {
     {
       id: "comex-financial-hub",
       name: "Package 04: Trade & Financial Intelligence Data Hub",
-      sla: "7 to 10 business days",
+      sla: "5 to 7 business days",
       painSolved:
         "Automates weekly reconciliation between official trade stats, Central Bank FX rates, and internal shipments for accurate Landed Cost & margin tracking.",
       deliverables: [
