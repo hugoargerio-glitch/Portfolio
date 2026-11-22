@@ -38,6 +38,8 @@ export interface EducationItem {
   school: string;
   degree: string;
   dateRange: string;
+  badge?: string;
+  logoType?: "ads" | "pucrs";
   achievements: string[];
   domainSkills: EducationDomainSkill[];
   impactTitle?: string;
@@ -310,10 +312,10 @@ export const cltConfig: SiteConfig = {
   },
   social: SHARED_SOCIAL,
   aboutMe:
-    "Engenheiro de Dados e Desenvolvedor Backend Python focado em arquiteturas resilientes, integridade transacional e governança de dados guiada por contratos executáveis (ODCS v3.2.0) e validação shift-left com Pydantic V2. Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM e graduando em Comércio Exterior pela PUCRS.",
+    "Engenheiro de Dados e Desenvolvedor Backend Python focado em arquiteturas resilientes, integridade transacional e governança de dados guiada por contratos executáveis (ODCS v3.2.0) e validação shift-left com Pydantic V2. Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM, com base em Comércio Exterior pela PUCRS (2026) e ingresso em Análise e Desenvolvimento de Sistemas (ADS) em Fev. 2027.",
   aboutParagraphs: [
     "Engenheiro de Dados e Desenvolvedor Backend Python focado em arquiteturas resilientes, integridade transacional e governança de dados guiada por contratos executáveis (ODCS v3.2.0) e validação shift-left com Pydantic V2.",
-    "Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM e graduando em Comércio Exterior pela PUCRS.",
+    "Construo pipelines idempotentes em Python 3.12, SQL avançado (PostgreSQL 16, PL/pgSQL, SQLite WAL) e stacks Lakehouse Medallion (Apache Airflow, PySpark, Databricks, Delta Lake e Snowflake), sempre empacotados em Docker Compose sobre Linux nativo. Certificado em Data Engineering e Data Architecture pela IBM, com base em Comércio Exterior pela PUCRS (2026) e ingresso em Análise e Desenvolvimento de Sistemas (ADS) em Fev. 2027.",
   ],
   skills: [
     "Python 3.12",
@@ -422,9 +424,22 @@ export const cltConfig: SiteConfig = {
   ],
   education: [
     {
+      school: "Transição Acadêmica para TI • Ingresso 2027/1",
+      degree: "Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)",
+      dateRange: "Ingresso: Fev. 2027",
+      badge: "Próxima Graduação • TI & Engenharia de Software",
+      logoType: "ads",
+      achievements: [
+        "Transição formal para a área de tecnologia alinhada à atuação prática em Engenharia de Dados, Backend Python, SQL e arquiteturas distribuídas.",
+      ],
+      domainSkills: [],
+    },
+    {
       school: "Pontifícia Universidade Católica do Rio Grande do Sul (PUCRS)",
       degree: "Tecnólogo em Comércio Exterior",
-      dateRange: "Previsão de Conclusão: Dez. 2028",
+      dateRange: "2026 · 1 ano cursado (Transição para TI)",
+      badge: "Diferencial de Domínio • Finanças & Comex",
+      logoType: "pucrs",
       achievements: [
         "Domínio de regras cambiais, Incoterms 2020, classificação NCM e formação de tributos aduaneiros aplicados diretamente à modelagem de dados financeiros e fiscais.",
         "Base quantitativa e regulatória voltada à governança de fluxos cross-border e conciliação contábil.",
@@ -514,10 +529,10 @@ export const freelaConfig: SiteConfig = {
   },
   social: SHARED_SOCIAL,
   aboutMe:
-    "Ajudo empresas, importadoras e operações B2B a eliminar planilhas manuais que travam, integrações frágeis de ERPs e retrabalho financeiro através de pipelines de dados que rodam sozinhos em segundo plano. Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com formação em Comércio Exterior (PUCRS) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
+    "Ajudo empresas, importadoras e operações B2B a eliminar planilhas manuais que travam, integrações frágeis de ERPs e retrabalho financeiro através de pipelines de dados que rodam sozinhos em segundo plano. Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com base em Comércio Exterior (PUCRS, 2026) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
   aboutParagraphs: [
     "Ajudo empresas, importadoras e operações B2B a eliminar planilhas manuais que travam, integrações frágeis de ERPs e retrabalho financeiro através de pipelines de dados que rodam sozinhos em segundo plano.",
-    "Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com formação em Comércio Exterior (PUCRS) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
+    "Em vez de scripts improvisados que param na primeira oscilação da API, entrego automações com validação na entrada, zero registros duplicados, tabela de auditoria de execuções e deploy isolado em Docker com baixo custo de infraestrutura. Uno engenharia de dados certificada pela IBM com base em Comércio Exterior (PUCRS, 2026) para transformar regras reais de negócio em sistemas previsíveis e com escopo fechado.",
   ],
   impactCards: [
     {
@@ -668,7 +683,7 @@ export const freelaConfig: SiteConfig = {
         "Tabelas analíticas prontas para diretoria acompanhar custo de internação e exposição cambial",
       ],
       proofAnchor:
-        "Prova técnica: comex-data-engine-v2 + MacroFlow-Lakehouse + Comércio Exterior (PUCRS)",
+        "Prova técnica: comex-data-engine-v2 + MacroFlow-Lakehouse + Comércio Exterior (PUCRS, 2026)",
     },
   ],
   experience: [
@@ -685,9 +700,22 @@ export const freelaConfig: SiteConfig = {
   ],
   education: [
     {
+      school: "Transição Acadêmica para TI • Ingresso 2027/1",
+      degree: "Tecnólogo em Análise e Desenvolvimento de Sistemas (ADS)",
+      dateRange: "Ingresso: Fev. 2027",
+      badge: "Próxima Graduação • TI & Engenharia de Software",
+      logoType: "ads",
+      achievements: [
+        "Aprofundamento acadêmico em engenharia de software, bancos de dados e sistemas distribuídos para potencializar entregas B2B ponta a ponta.",
+      ],
+      domainSkills: [],
+    },
+    {
       school: "Pontifícia Universidade Católica do Rio Grande do Sul (PUCRS)",
       degree: "Tecnólogo em Comércio Exterior",
-      dateRange: "Previsão de Conclusão: Dez. 2028",
+      dateRange: "2026 · 1 ano cursado (Transição para TI)",
+      badge: "Diferencial de Domínio • Finanças & Comex",
+      logoType: "pucrs",
       achievements: [
         "Diferencial de negócio para operações de importação/exportação: domínio prático de NCM, Incoterms 2020 (FOB/CIF), câmbio PTAX e composição de custos aduaneiros.",
         "Capacidade de alinhar diretamente regras fiscais e operacionais com o desenho técnico de bancos de dados e painéis gerenciais.",

@@ -188,10 +188,10 @@ export const cltConfigEn: SiteConfig = {
   },
   social: SHARED_SOCIAL,
   aboutMe:
-    "Data Engineer and Python Backend Developer focused on resilient architectures, transactional integrity, and governance powered by executable Data Contracts (ODCS v3.2.0) and Shift-Left Validation with Pydantic V2. I build idempotent pipelines in Python 3.12, advanced SQL (PostgreSQL 16, PL/pgSQL, SQLite WAL), and Medallion Lakehouse stacks (Apache Airflow, PySpark, Databricks, Delta Lake, and Snowflake) containerized with Docker Compose on native Linux. Certified by IBM in Data Engineering and Data Architecture while pursuing a degree in Foreign Trade at PUCRS.",
+    "Data Engineer and Python Backend Developer focused on resilient architectures, transactional integrity, and governance powered by executable Data Contracts (ODCS v3.2.0) and Shift-Left Validation with Pydantic V2. I build idempotent pipelines in Python 3.12, advanced SQL (PostgreSQL 16, PL/pgSQL, SQLite WAL), and Medallion Lakehouse stacks (Apache Airflow, PySpark, Databricks, Delta Lake, and Snowflake) containerized with Docker Compose on native Linux. Certified by IBM in Data Engineering and Data Architecture, with a Foreign Trade foundation from PUCRS (2026) and incoming Systems Analysis & Development (ADS, Feb 2027).",
   aboutParagraphs: [
     "Data Engineer and Python Backend Developer focused on resilient architectures, transactional integrity, and governance powered by executable Data Contracts (ODCS v3.2.0) and Shift-Left Validation with Pydantic V2.",
-    "I build idempotent pipelines in Python 3.12, advanced SQL (PostgreSQL 16, PL/pgSQL, SQLite WAL), and Medallion Lakehouse stacks (Apache Airflow, PySpark, Databricks, Delta Lake, and Snowflake) containerized with Docker Compose on native Linux. Certified by IBM in Data Engineering and Data Architecture while pursuing a Foreign Trade degree at PUCRS.",
+    "I build idempotent pipelines in Python 3.12, advanced SQL (PostgreSQL 16, PL/pgSQL, SQLite WAL), and Medallion Lakehouse stacks (Apache Airflow, PySpark, Databricks, Delta Lake, and Snowflake) containerized with Docker Compose on native Linux. Certified by IBM in Data Engineering and Data Architecture, with a Foreign Trade foundation from PUCRS (2026) and incoming Systems Analysis & Development (ADS, Feb 2027).",
   ],
   skills: cltConfig.skills,
   projects: [
@@ -252,9 +252,22 @@ export const cltConfigEn: SiteConfig = {
   ],
   education: [
     {
+      school: "Academic Transition to IT • 2027/1 Intake",
+      degree: "Associate Degree in Systems Analysis & Development (ADS)",
+      dateRange: "Starting: Feb 2027",
+      badge: "Incoming Degree • IT & Software Engineering",
+      logoType: "ads",
+      achievements: [
+        "Formal academic transition into IT aligned with hands-on work in Data Engineering, Python Backend, SQL, and distributed architectures.",
+      ],
+      domainSkills: [],
+    },
+    {
       school: "Pontifical Catholic University of Rio Grande do Sul (PUCRS)",
       degree: "Associate Degree in Foreign Trade (Comex)",
-      dateRange: "Expected Graduation: Dec 2028",
+      dateRange: "2026 · 1 Year Completed (Transition to IT)",
+      badge: "Domain Edge • Finance & Global Trade",
+      logoType: "pucrs",
       achievements: [
         "Deep command of FX rules, Incoterms 2020, HS/NCM tariff classification, and cascading customs tax logic applied directly to financial and fiscal data modeling.",
         "Quantitative and regulatory foundation tailored to cross-border trade flows and accounting reconciliation.",
@@ -343,10 +356,10 @@ export const freelaConfigEn: SiteConfig = {
   },
   social: SHARED_SOCIAL,
   aboutMe:
-    "I help B2B teams, importers, and finance operations eliminate brittle spreadsheets, flaky ERP integrations, and manual reconciliation through reliable background data pipelines. Instead of ad-hoc scripts that break on the first API hiccup, I deliver automated systems with input validation, zero duplicate records, execution audit logs, and low-footprint Docker deployments. I combine IBM-certified Data Engineering with Foreign Trade domain expertise (PUCRS) to turn real business rules into predictable, fixed-scope software.",
+    "I help B2B teams, importers, and finance operations eliminate brittle spreadsheets, flaky ERP integrations, and manual reconciliation through reliable background data pipelines. Instead of ad-hoc scripts that break on the first API hiccup, I deliver automated systems with input validation, zero duplicate records, execution audit logs, and low-footprint Docker deployments. I combine IBM-certified Data Engineering with a Foreign Trade domain background (PUCRS, 2026) to turn real business rules into predictable, fixed-scope software.",
   aboutParagraphs: [
     "I help B2B teams, importers, and finance operations eliminate brittle spreadsheets, flaky ERP integrations, and manual reconciliation through reliable background data pipelines.",
-    "Instead of ad-hoc scripts that break on the first API hiccup, I deliver automated systems with input validation, zero duplicate records, execution audit logs, and low-footprint Docker deployments. I combine IBM-certified Data Engineering with Foreign Trade domain expertise (PUCRS) to turn real business rules into predictable, fixed-scope software.",
+    "Instead of ad-hoc scripts that break on the first API hiccup, I deliver automated systems with input validation, zero duplicate records, execution audit logs, and low-footprint Docker deployments. I combine IBM-certified Data Engineering with a Foreign Trade domain background (PUCRS, 2026) to turn real business rules into predictable, fixed-scope software.",
   ],
   impactCards: [
     {
@@ -497,7 +510,7 @@ export const freelaConfigEn: SiteConfig = {
         "Executive-ready analytical tables tracking landed cost per SKU and currency exposure",
       ],
       proofAnchor:
-        "Technical proof: comex-data-engine-v2 + MacroFlow-Lakehouse + Foreign Trade (PUCRS)",
+        "Technical proof: comex-data-engine-v2 + MacroFlow-Lakehouse + Foreign Trade (PUCRS, 2026)",
     },
   ],
   experience: [
@@ -514,9 +527,22 @@ export const freelaConfigEn: SiteConfig = {
   ],
   education: [
     {
+      school: "Academic Transition to IT • 2027/1 Intake",
+      degree: "Associate Degree in Systems Analysis & Development (ADS)",
+      dateRange: "Starting: Feb 2027",
+      badge: "Incoming Degree • IT & Software Engineering",
+      logoType: "ads",
+      achievements: [
+        "Academic foundation in software engineering, databases, and distributed systems supporting end-to-end B2B data delivery.",
+      ],
+      domainSkills: [],
+    },
+    {
       school: "Pontifical Catholic University of Rio Grande do Sul (PUCRS)",
       degree: "Associate Degree in Foreign Trade (Comex)",
-      dateRange: "Expected Graduation: Dec 2028",
+      dateRange: "2026 · 1 Year Completed (Transition to IT)",
+      badge: "Domain Edge • Finance & Global Trade",
+      logoType: "pucrs",
       achievements: [
         "Business-ready edge for import/export operations: hands-on command of HS/NCM classification, Incoterms 2020 (FOB/CIF), FX settlement, and customs cost structures.",
         "Ability to translate fiscal and operational rules directly into clean relational schemas and executive BI dashboards.",

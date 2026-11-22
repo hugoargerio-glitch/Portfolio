@@ -43,8 +43,8 @@ const hasEducation = profileEntries.some(
               class="edu-reveal-card opacity-0 translate-y-3 transition-all duration-500 ease-out rounded-xl sm:rounded-2xl border border-gray-200/90 dark:border-slate-800 bg-gray-50/90 dark:bg-[#111827]/90 p-4 sm:p-5"
             >
               {profileBilingualEntries.map(({ modeClass, pt, en }) => {
-                const eduPt = pt.education[0];
-                const eduEn = en.education[0] ?? eduPt;
+                const eduPt = pt.education.find((e) => e.impactItems?.length);
+                const eduEn = en.education.find((e) => e.impactItems?.length) ?? eduPt;
                 if (!eduPt?.impactItems?.length) return null;
                 return (
                   <div class={`${modeClass} space-y-3.5`}>
@@ -94,12 +94,20 @@ const hasEducation = profileEntries.some(
 
           <div class="lg:col-span-8">
             {profileBilingualEntries.map(({ modeClass, pt, en }) => (
-              <div class={`${modeClass} space-y-8`}>
+              <div class={`${modeClass} space-y-6`}>
                 {pt.education.map((edu, eduIdx) => {
                   const eduEn = en.education[eduIdx] ?? edu;
+                  const isAds = edu.logoType === "ads";
+                  const hasSkills = Boolean(edu.domainSkills && edu.domainSkills.length > 0);
+                  const badgePt = edu.badge ?? "Diferencial de Domínio • Finanças & Comex";
+                  const badgeEn = eduEn.badge ?? "Domain Edge • Finance & Global Trade";
                   return (
-                    <article class="bg-white dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl shadow-sm border border-gray-200/90 dark:border-slate-800 p-5 sm:p-6 md:p-8 hover:shadow-md hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60 transition-all duration-300">
-                      {/* Topo do card: Badge de destaque + Previsão */}
+                    <article
+                      class={`bg-white dark:bg-[#111827]/90 rounded-xl sm:rounded-2xl shadow-sm border border-gray-200/90 dark:border-slate-800 hover:shadow-md hover:border-gray-300 dark:hover:border-[var(--accent-color)]/60 transition-all duration-300 ${
+                        isAds ? "p-4 sm:p-5 md:p-6" : "p-5 sm:p-6 md:p-8"
+                      }`}
+                    >
+                      {/* Topo do card: Badge de destaque + Data */}
                       <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-gray-100 dark:border-slate-800">
                         <span
                           class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border transition-colors duration-300"
@@ -109,10 +117,7 @@ const hasEducation = profileEntries.some(
                             class="w-1.5 h-1.5 rounded-full"
                             style="background-color: var(--accent-color)"
                           />
-                          <BiText
-                            pt="Diferencial de Domínio • Finanças & Comex"
-                            en="Domain Edge • Finance & Global Trade"
-                          />
+                          <BiText pt={badgePt} en={badgeEn} />
                         </span>
 
                         <span class="text-xs sm:text-sm font-mono text-gray-500 dark:text-slate-400">
@@ -120,31 +125,57 @@ const hasEducation = profileEntries.some(
                         </span>
                       </div>
 
-                      {/* Identidade do curso com Logo Oficial da PUCRS */}
-                      <div class="flex items-start gap-3.5 sm:gap-4 mb-5">
-                        <div class="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center shadow-sm shrink-0">
-                          <img
-                            src={withBase("icons/PUCRS.png")}
-                            alt="PUCRS"
-                            loading="lazy"
-                            decoding="async"
-                            onerror={`if(!this.dataset.fb1){this.dataset.fb1='1';this.src='${withBase("icons/pucrs.png")}';}else if(!this.dataset.fb2){this.dataset.fb2='1';this.src='${withBase("icons/pucrs.svg")}';}else{this.classList.add('hidden');this.nextElementSibling?.classList.remove('hidden');}`}
-                            class="w-full h-full object-cover scale-105"
-                          />
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#1d4ed8"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                      {/* Identidade do curso */}
+                      <div class={`flex items-start gap-3.5 sm:gap-4 ${hasSkills ? "mb-5" : "mb-4"}`}>
+                        {isAds ? (
+                          <div
+                            class="w-12 h-12 rounded-xl border flex items-center justify-center shadow-sm shrink-0 transition-colors duration-300"
+                            style="color: var(--accent-color); border-color: color-mix(in srgb, var(--accent-color) 35%, transparent); background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);"
                             aria-hidden="true"
-                            class="hidden w-6 h-6"
                           >
-                            <path d="M12 3l8 4.5v5c0 4.5-3.4 7.7-8 8.5-4.6-.8-8-4-8-8.5v-5l8-4.5z" />
-                          </svg>
-                        </div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="w-6 h-6"
+                            >
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                              <path d="M7 8l-4 4l4 4" />
+                              <path d="M17 8l4 4l-4 4" />
+                              <path d="M14 4l-4 16" />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div class="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center shadow-sm shrink-0">
+                            <img
+                              src={withBase("icons/PUCRS.png")}
+                              alt="PUCRS"
+                              loading="lazy"
+                              decoding="async"
+                              onerror={`if(!this.dataset.fb1){this.dataset.fb1='1';this.src='${withBase("icons/pucrs.png")}';}else if(!this.dataset.fb2){this.dataset.fb2='1';this.src='${withBase("icons/pucrs.svg")}';}else{this.classList.add('hidden');this.nextElementSibling?.classList.remove('hidden');}`}
+                              class="w-full h-full object-cover scale-105"
+                            />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="#1d4ed8"
+                              stroke-width="1.8"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                              class="hidden w-6 h-6"
+                            >
+                              <path d="M12 3l8 4.5v5c0 4.5-3.4 7.7-8 8.5-4.6-.8-8-4-8-8.5v-5l8-4.5z" />
+                            </svg>
+                          </div>
+                        )}
 
                         <div class="min-w-0">
                           <h3 class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-slate-100 leading-snug">
@@ -159,7 +190,7 @@ const hasEducation = profileEntries.some(
                         </div>
                       </div>
 
-                      <ul class="space-y-2 mb-6">
+                      <ul class={`space-y-2 ${hasSkills ? "mb-6" : ""}`}>
                         {edu.achievements.map((achievement, aIdx) => (
                           <li class="flex items-start">
                             <span
