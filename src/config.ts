@@ -129,7 +129,7 @@ export const SHARED_IDENTITY = {
 
 export const SHARED_SOCIAL: SocialLinks = {
   email: "hugoargerio@gmail.com",
-  linkedin: "https://linkedin.com/in/hugo-campos-b2a678273",
+  linkedin: "https://www.linkedin.com/in/hugoocampos/",
   github: "https://github.com/hugoargerio-glitch",
   whatsapp: WHATSAPP_URL,
 };
